@@ -275,50 +275,131 @@ textarea.fctl{resize:vertical;min-height:65px;}
 <body>
 
 <!-- ═══ LOGIN SCREEN ═══ -->
+<!-- ═══ LOGIN SCREEN ═══ -->
 <div id="login-screen">
-  <div class="login-box">
-    <div class="login-brand">
-      <div class="lb-name">Pushp Construction &amp; Interior</div>
-      <div class="lb-sub">Task Management System</div>
-    </div>
-    <div class="login-tabs">
-      <button class="ltab active" id="ltab-login" onclick="switchLoginTab('login')">Sign In</button>
-      <button class="ltab" id="ltab-register" onclick="switchLoginTab('register')">Register</button>
-    </div>
-
-    <!-- SIGN IN PANEL -->
-    <div id="lpanel-login">
-      <div class="lfield"><label>Username / Employee Name</label><input id="l-username" type="text" placeholder="Enter your name or username" autocomplete="username"/></div>
-      <div class="lfield"><label>Password</label><input id="l-password" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-      <div class="login-err" id="l-err"></div>
-      <button class="login-btn" onclick="doLogin()">Sign In →</button>
-      <div class="login-hint">
-        <strong>Admin login:</strong> username <code>admin</code> · password <code>admin123</code><br>
-        <strong>Employees:</strong> register with your name, then sign in.<br>
-        Your tasks will be linked to your team profile.
+  <style>
+    .lp-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;text-align:center;line-height:1.5;margin-bottom:8px;}
+    .pushp-txt{font-size:26px;color:#fff;display:block;letter-spacing:.06em;}
+    .const-txt{display:inline-block;background:linear-gradient(90deg,#2e7d32,#43a047);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:22px;}
+    .amp-txt{color:#555;font-size:16px;}
+    .interior-txt{display:inline-block;background:linear-gradient(90deg,#c62828,#ef5350);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:22px;}
+    #login-screen{position:fixed;inset:0;background:#080810;z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .login-outer{background:rgba(14,14,22,0.98);border:1px solid rgba(255,255,255,0.07);border-radius:24px;width:100%;max-width:760px;display:flex;overflow:hidden;min-height:520px;}
+    .login-left{width:45%;background:linear-gradient(160deg,#0d2b0f 0%,#1a0a0a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 2rem;border-right:1px solid rgba(255,255,255,0.04);}
+    .login-right{width:55%;padding:2.5rem 2rem;display:flex;flex-direction:column;justify-content:center;}
+    .lp-sub{font-size:11px;color:#3a4a3a;text-transform:uppercase;letter-spacing:.14em;text-align:center;margin-bottom:2rem;}
+    .lp-divider{width:40px;height:2px;background:linear-gradient(90deg,#2e7d32,#c62828);border-radius:2px;margin-bottom:2rem;}
+    .lp-stats{display:flex;flex-direction:column;gap:10px;width:100%;}
+    .lp-stat{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.05);}
+    .lp-stat-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+    .lp-stat-txt{font-size:12px;color:#5a6a5a;}
+    .lp-stat-val{font-size:13px;font-weight:600;color:#c8d8c8;margin-top:1px;}
+    .rp-welcome{font-size:11px;color:#3a3a60;text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px;}
+    .rp-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#e8e8f8;line-height:1.2;margin-bottom:1.75rem;}
+    .rp-title span{color:#4caf50;}
+    .login-tabs{display:flex;gap:0;background:rgba(255,255,255,0.03);border-radius:10px;padding:3px;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,0.05);}
+    .ltab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:500;cursor:pointer;border-radius:8px;color:#404060;border:none;background:transparent;font-family:var(--font);transition:all .15s;}
+    .ltab.active{background:#1a1a2e;color:#9090c8;border:1px solid rgba(255,255,255,0.08);}
+    .lfield{margin-bottom:12px;}
+    .lfield label{font-size:10px;color:#404060;display:block;margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;}
+    .lfield-wrap{position:relative;}
+    .lfield-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;opacity:0.3;}
+    .lfield input,.lfield select{width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:11px 14px 11px 36px;font-size:13px;color:#d0d0e8;outline:none;box-sizing:border-box;font-family:var(--font);transition:border-color .2s;}
+    .lfield input:focus,.lfield select:focus{border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.03);}
+    .lfield select option{background:#1a1a24;}
+    .login-btn{width:100%;padding:12px;background:#1e5c21;color:#a8d5aa;border:1px solid rgba(46,125,50,0.4);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;font-family:var(--font);letter-spacing:.05em;transition:all .2s;}
+    .login-btn:hover{background:#2e7d32;color:#fff;}
+    .login-err{font-size:12px;color:var(--red);margin-top:8px;text-align:center;min-height:18px;}
+    .login-footer{margin-top:1.5rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.04);text-align:center;font-size:10px;color:#252535;}
+    @media(max-width:600px){.login-outer{flex-direction:column;}.login-left{width:100%;min-height:auto;padding:1.5rem;}.login-right{width:100%;}}
+  </style>
+  <div class="login-outer">
+    <div class="login-left">
+      <div class="lp-name">
+        <span class="pushp-txt">PUSHP</span>
+        <span class="const-txt">Construction</span><br>
+        <span class="amp-txt">&amp;</span> <span class="interior-txt">Interior</span>
       </div>
-      <div style="margin-top:10px;text-align:center">
-        <span onclick="hardReset()" style="font-size:10px;color:var(--text3);cursor:pointer;text-decoration:underline">
-          Can't login? Reset app data
-        </span>
+      <div class="lp-sub">Mumbai · Est. 2020</div>
+      <div class="lp-divider"></div>
+      <div class="lp-stats">
+        <div class="lp-stat">
+          <div class="lp-stat-icon" style="background:rgba(76,175,80,0.1)">🏗</div>
+          <div><div class="lp-stat-txt">Projects Done</div><div class="lp-stat-val">200+</div></div>
+        </div>
+        <div class="lp-stat">
+          <div class="lp-stat-icon" style="background:rgba(77,166,255,0.1)">👥</div>
+          <div><div class="lp-stat-txt">Team Members</div><div class="lp-stat-val">Active Staff</div></div>
+        </div>
+        <div class="lp-stat">
+          <div class="lp-stat-icon" style="background:rgba(239,83,80,0.1)">📍</div>
+          <div><div class="lp-stat-txt">Location</div><div class="lp-stat-val">Bhandup, Mumbai</div></div>
+        </div>
       </div>
     </div>
-
-    <!-- REGISTER PANEL -->
-    <div id="lpanel-register" style="display:none">
-      <div class="lfield"><label>Full Name *</label><input id="r-name" type="text" placeholder="e.g. Ravi Kumar"/></div>
-      <div class="lfield"><label>Username (for login) *</label><input id="r-username" type="text" placeholder="e.g. ravi.kumar"/></div>
-      <div class="lfield"><label>Password *</label><input id="r-password" type="password" placeholder="Choose a password"/></div>
-      <div class="lfield"><label>Link to Team Member Profile</label>
-        <select id="r-member">
-          <option value="">— Select your profile (optional) —</option>
-        </select>
+    <div class="login-right">
+      <div class="rp-welcome">Welcome back</div>
+      <div class="rp-title">Sign in to your<br><span>workspace</span></div>
+      <div class="login-tabs">
+        <button class="ltab active" id="ltab-login" onclick="switchLoginTab('login')">Sign In</button>
+        <button class="ltab" id="ltab-register" onclick="switchLoginTab('register')">Register</button>
       </div>
-      <div class="login-err" id="r-err"></div>
-      <button class="login-btn" onclick="doRegister()">Create Account →</button>
+      <!-- SIGN IN -->
+      <div id="lpanel-login">
+        <div class="lfield">
+          <label>Username</label>
+          <div class="lfield-wrap">
+            <span class="lfield-icon">👤</span>
+            <input id="l-username" type="text" placeholder="Enter your username" autocomplete="username"/>
+          </div>
+        </div>
+        <div class="lfield">
+          <label>Password</label>
+          <div class="lfield-wrap">
+            <span class="lfield-icon">🔒</span>
+            <input id="l-password" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+          </div>
+        </div>
+        <div class="login-err" id="l-err"></div>
+        <button class="login-btn" onclick="doLogin()">Sign In →</button>
+      </div>
+      <!-- REGISTER -->
+      <div id="lpanel-register" style="display:none">
+        <div class="lfield">
+          <label>Full Name *</label>
+          <div class="lfield-wrap">
+            <span class="lfield-icon">👤</span>
+            <input id="r-name" type="text" placeholder="e.g. Ravi Kumar"/>
+          </div>
+        </div>
+        <div class="lfield">
+          <label>Username *</label>
+          <div class="lfield-wrap">
+            <span class="lfield-icon">🔑</span>
+            <input id="r-username" type="text" placeholder="e.g. ravi.kumar"/>
+          </div>
+        </div>
+        <div class="lfield">
+          <label>Password *</label>
+          <div class="lfield-wrap">
+            <span class="lfield-icon">🔒</span>
+            <input id="r-password" type="password" placeholder="Choose a password"/>
+          </div>
+        </div>
+        <div class="lfield">
+          <label>Link to Team Member Profile</label>
+          <select id="r-member">
+            <option value="">— Select your profile (optional) —</option>
+          </select>
+        </div>
+        <div class="login-err" id="r-err"></div>
+        <button class="login-btn" onclick="doRegister()">Create Account →</button>
+      </div>
+      <div class="login-footer">© 2025 Pushp Construction & Interior</div>
     </div>
   </div>
 </div>
+<!-- ═══ END LOGIN ═══ -->
 <!-- ═══ END LOGIN ═══ -->
 
 
