@@ -246,7 +246,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
   .field-grid{grid-template-columns:1fr;}
 }
 
-/* ── LOGIN ── */
+/* LOGIN */
 #login-screen{position:fixed;inset:0;background:var(--bg);z-index:300;display:flex;align-items:center;justify-content:center;padding:1rem;}
 .login-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:2.5rem 2rem;width:100%;max-width:400px;border-top:4px solid #2e7d32;}
 .login-brand{text-align:center;margin-bottom:1.75rem;}
@@ -264,18 +264,38 @@ textarea.fctl{resize:vertical;min-height:65px;}
 .login-btn:hover{background:var(--accent2);}
 .login-err{font-size:12px;color:var(--red);margin-top:8px;text-align:center;min-height:18px;}
 .login-hint{font-size:11px;color:var(--text3);text-align:center;margin-top:14px;line-height:1.7;background:var(--bg3);padding:10px;border-radius:var(--radius-sm);}
-/* ── ROLE BADGE in topbar ── */
 .role-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .role-admin{background:rgba(46,125,50,.15);color:#2e7d32;border:1px solid rgba(46,125,50,.3);}
 .role-user{background:rgba(77,166,255,.12);color:#4da6ff;border:1px solid rgba(77,166,255,.3);}
-/* ── locked overlay on task actions ── */
 .locked-tip{font-size:11px;color:var(--text3);font-style:italic;padding:4px 6px;}
+
+/* ═══ PRESENCE ═══ */
+.presence-dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex-shrink:0;transition:all .3s;}
+.presence-dot.online{background:#2ecc8a;box-shadow:0 0 6px #2ecc8a;}
+.presence-dot.offline{background:#444;}
+
+/* ═══ COMMENTS ═══ */
+.comment-section{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;}
+.comment-item{display:flex;gap:8px;margin-bottom:10px;}
+.comment-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;}
+.comment-body{flex:1;background:var(--bg3);border-radius:var(--radius-sm);padding:8px 10px;}
+.comment-author{font-size:11px;font-weight:600;color:var(--accent);margin-bottom:2px;}
+.comment-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.comment-time{font-size:10px;color:var(--text3);margin-top:3px;}
+.comment-input-row{display:flex;gap:8px;margin-top:8px;}
+.comment-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;color:var(--text);outline:none;resize:none;}
+.comment-input:focus{border-color:var(--accent);}
+
+/* ═══ GPS ═══ */
+.gps-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;background:rgba(38,198,218,0.1);color:var(--teal);border:1px solid rgba(38,198,218,0.2);cursor:pointer;}
+.gps-badge:hover{background:rgba(38,198,218,0.2);}
+.gps-map-link{font-size:11px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:3px;}
+.gps-map-link:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
 
-<!-- ═══ LOGIN SCREEN ═══ -->
-<!-- ═══ LOGIN SCREEN ═══ -->
+<!-- LOGIN SCREEN -->
 <div id="login-screen">
   <style>
     .lp-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;text-align:center;line-height:1.5;margin-bottom:8px;}
@@ -344,7 +364,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <button class="ltab active" id="ltab-login" onclick="switchLoginTab('login')">Sign In</button>
         <button class="ltab" id="ltab-register" onclick="switchLoginTab('register')">Register</button>
       </div>
-      <!-- SIGN IN -->
       <div id="lpanel-login">
         <div class="lfield">
           <label>Username</label>
@@ -363,7 +382,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <div class="login-err" id="l-err"></div>
         <button class="login-btn" onclick="doLogin()">Sign In →</button>
       </div>
-      <!-- REGISTER -->
       <div id="lpanel-register" style="display:none">
         <div class="lfield">
           <label>Full Name *</label>
@@ -399,12 +417,8 @@ textarea.fctl{resize:vertical;min-height:65px;}
     </div>
   </div>
 </div>
-<!-- ═══ END LOGIN ═══ -->
-<!-- ═══ END LOGIN ═══ -->
-
 
 <div class="layout" id="app-layout" style="display:none">
-  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <div class="slogo">
       <div class="slogo-t" style="color:#2e7d32;font-size:15px;line-height:1.2">Pushp Construction<br><span style="color:#c62828">&amp; Interior</span></div>
@@ -427,7 +441,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
       </div>
     </nav>
     <div class="sfooter">
-      <div style="font-size:10px;color:var(--text3);line-height:1.6;padding:0 .5rem .5rem;border-bottom:1px solid var(--border);margin-bottom:8px">📍 B-26, EBD, L.B.S. Marg,<br>Bhandup (W), Mumbai 400 078<br>📞 02244821401 · 9833585445<br>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="334346405b431d505a73545e525a5f1d505c5e">[email&#160;protected]</a><br>GSTN: 27ARCPB6945J2ZN</div>
+      <div style="font-size:10px;color:var(--text3);line-height:1.6;padding:0 .5rem .5rem;border-bottom:1px solid var(--border);margin-bottom:8px">📍 B-26, EBD, L.B.S. Marg,<br>Bhandup (W), Mumbai 400 078<br>📞 02244821401 · 9833585445<br>✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6010151308104e030920070d01090c4e030f0d">[email&#160;protected]</a><br>GSTN: 27ARCPB6945J2ZN</div>
       <div class="admin-only" style="padding:0 .5rem .75rem;border-bottom:1px solid var(--border);margin-bottom:8px">
         <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">🔗 Webhook / Make.com</div>
         <div style="font-size:10px;color:var(--accent);cursor:pointer;display:flex;align-items:center;gap:4px" onclick="openWebhookSettings()">⚙ Configure Alerts →</div>
@@ -435,13 +449,18 @@ textarea.fctl{resize:vertical;min-height:65px;}
       </div>
       <div class="userpill">
         <div class="avatar">AD</div>
-        <div><div class="uname">Admin</div><div class="urole">Manager</div></div>
+        <div>
+          <div class="uname" style="display:flex;align-items:center;gap:6px">
+            <span id="uname-text">Admin</span>
+            <div class="presence-dot online" id="my-presence-dot" title="You are online"></div>
+          </div>
+          <div class="urole">Manager</div>
+        </div>
       </div>
     </div>
   </div>
   <div class="soverlay" id="soverlay" onclick="closeSidebar()"></div>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
@@ -456,7 +475,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
             <div onclick="exportPDF();closeExportMenu()" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">📄 PDF Report</div>
             <div onclick="exportDashboardPDF();closeExportMenu()" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--text2);display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">📋 Summary Dashboard PDF</div>
             <div onclick="downloadTemplate();closeExportMenu()" style="padding:10px 16px;font-size:13px;cursor:pointer;color:var(--teal);font-weight:500;display:flex;align-items:center;gap:8px;border-top:2px dashed var(--border2);transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">📥 Download Bulk Upload Template</div>
-            <div onclick="openBulkUpload();closeExportMenu()" style="padding:10px 16px;font-size:13px;cursor:pointer;color:#2e7d32;font-weight:500;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''"">⬆ Bulk Upload Tasks (CSV)</div>
+            <div onclick="openBulkUpload();closeExportMenu()" style="padding:10px 16px;font-size:13px;cursor:pointer;color:#2e7d32;font-weight:500;display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">⬆ Bulk Upload Tasks (CSV)</div>
           </div>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="openTeamCall()" style="color:var(--blue);border-color:rgba(77,166,255,0.3)">📹 Team Call</button>
@@ -466,7 +485,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
     </div>
 
     <div class="content">
-
       <!-- DASHBOARD -->
       <div class="view active" id="view-dashboard">
         <div class="sgrid">
@@ -624,7 +642,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <div style="margin-bottom:1.5rem"><h2 style="font-family:var(--font-head);font-size:18px;font-weight:700">Activity Log</h2></div>
         <div class="panel"><div class="pb"><div id="full-act"></div></div></div>
       </div>
-
     </div>
   </div>
 </div>
@@ -670,8 +687,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
       <div class="fgrid full">
         <div class="fg"><label class="flbl">Description</label><textarea class="fctl" id="f-desc" placeholder="Task details..."></textarea></div>
       </div>
-
-      <!-- FIELD JOB SECTION -->
       <div class="sdiv">Field Job Details</div>
       <div class="field-section">
         <div class="field-toggle-row" style="margin-bottom:12px">
@@ -700,8 +715,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
           </div>
         </div>
       </div>
-
-      <!-- NOTIFICATIONS -->
       <div class="sdiv">Notifications</div>
       <div style="margin-bottom:12px">
         <div class="flbl" style="margin-bottom:8px">Notify owner via</div>
@@ -713,8 +726,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
           <div class="ntog" data-n="call">📞 Call</div>
         </div>
       </div>
-
-      <!-- ESCALATION -->
       <div class="sdiv">Escalation Matrix</div>
       <p style="font-size:12px;color:var(--text3);margin-bottom:12px">Define who gets notified if task is not completed on time</p>
       <div id="esc-steps-editor"></div>
@@ -761,7 +772,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
       <button class="btn btn-ghost btn-sm" onclick="closeModal('bulk-modal')">✕</button>
     </div>
     <div class="mbody">
-      <!-- Step indicator -->
       <div style="display:flex;align-items:center;gap:0;margin-bottom:1.5rem" id="bulk-steps">
         <div class="bulk-step active" id="bstep-1" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--accent);padding:6px 14px;background:var(--accent-glow);border-radius:var(--radius-sm)">① Upload File</div>
         <div style="flex:1;height:2px;background:var(--border)"></div>
@@ -769,8 +779,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <div style="flex:1;height:2px;background:var(--border)"></div>
         <div class="bulk-step" id="bstep-3" style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text3);padding:6px 14px">③ Import</div>
       </div>
-
-      <!-- Step 1: Upload -->
       <div id="bulk-step1">
         <div style="background:var(--bg3);border:2px dashed var(--border2);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1rem;cursor:pointer;transition:border-color .2s" id="drop-zone" onclick="document.getElementById('bulk-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border2)'" ondrop="handleFileDrop(event)">
           <div style="font-size:36px;margin-bottom:10px">📂</div>
@@ -778,19 +786,8 @@ textarea.fctl{resize:vertical;min-height:65px;}
           <div style="font-size:12px;color:var(--text3)">Supports .csv files — use the template for best results</div>
           <input type="file" id="bulk-file-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)"/>
         </div>
-        <div style="background:var(--teal-bg);border:1px solid rgba(38,198,218,.2);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:1rem">
-          <div style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:6px">📋 Template Column Guide</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.8">
-            <b>Required:</b> Task Title, Owner Name, Due Date (YYYY-MM-DD)<br>
-            <b>Optional:</b> Description, Priority (high/medium/low), Status, Category, Due Time (HH:MM), Repeat, Is Field Job (yes/no), Site Name, Site Address, Customer Name, Customer Phone, Customer Manager, Customer Manager Phone, Visit Date, Visit Time, Site Notes, Our Representative
-          </div>
-        </div>
-        <button class="btn btn-ghost" onclick="downloadTemplate()" style="width:100%;justify-content:center;gap:8px">
-          📥 Download Blank Template CSV first
-        </button>
+        <button class="btn btn-ghost" onclick="downloadTemplate()" style="width:100%;justify-content:center;gap:8px">📥 Download Blank Template CSV first</button>
       </div>
-
-      <!-- Step 2: Preview -->
       <div id="bulk-step2" style="display:none">
         <div id="bulk-preview-info" style="font-size:13px;color:var(--text2);margin-bottom:12px"></div>
         <div id="bulk-warnings" style="margin-bottom:12px"></div>
@@ -801,8 +798,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
           </table>
         </div>
       </div>
-
-      <!-- Step 3: Result -->
       <div id="bulk-step3" style="display:none;text-align:center;padding:2rem">
         <div style="font-size:48px;margin-bottom:12px" id="bulk-result-icon">✅</div>
         <div style="font-size:18px;font-weight:600;margin-bottom:8px" id="bulk-result-title">Import Complete!</div>
@@ -816,8 +811,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
   </div>
 </div>
 
-
-<!-- WEBHOOK SETTINGS MODAL -->
+<!-- WEBHOOK MODAL -->
 <div class="moverlay" id="webhook-modal">
   <div class="modal" style="max-width:560px">
     <div class="mhead">
@@ -825,75 +819,17 @@ textarea.fctl{resize:vertical;min-height:65px;}
       <button class="btn btn-ghost btn-sm" onclick="closeModal('webhook-modal')">✕</button>
     </div>
     <div class="mbody">
-      <div style="background:var(--teal-bg);border:1px solid rgba(38,198,218,.2);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--text2);line-height:1.7">
-        📌 Paste your <strong style="color:var(--teal)">Make.com</strong> or <strong style="color:var(--teal)">Zapier</strong> Webhook URL below.<br>
-        Every time a task reminder or escalation fires, the app will call this URL with all task details.<br>
-        Your Make/Zapier scenario then sends WhatsApp, SMS, Email &amp; Calls automatically.
-      </div>
-
       <div class="fg" style="margin-bottom:14px">
         <label class="flbl">Make.com / Zapier Webhook URL</label>
-        <input class="fctl" id="wh-url" placeholder="https://hook.make.com/xxxxx  or  https://hooks.zapier.com/hooks/catch/xxxxx" style="font-size:12px"/>
+        <input class="fctl" id="wh-url" placeholder="https://hook.make.com/xxxxx" style="font-size:12px"/>
       </div>
-
       <div class="fgrid" style="margin-bottom:14px">
-        <div class="fg">
-          <label class="flbl">Trigger: Task Due Reminder</label>
-          <select class="fctl" id="wh-due-enabled">
-            <option value="1">✅ Enabled</option>
-            <option value="0">❌ Disabled</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label class="flbl">Trigger: Escalation Alert</label>
-          <select class="fctl" id="wh-esc-enabled">
-            <option value="1">✅ Enabled</option>
-            <option value="0">❌ Disabled</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label class="flbl">Trigger: Hourly Reminder</label>
-          <select class="fctl" id="wh-hourly-enabled">
-            <option value="1">✅ Enabled</option>
-            <option value="0">❌ Disabled</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label class="flbl">Trigger: Task Completed</label>
-          <select class="fctl" id="wh-done-enabled">
-            <option value="1">✅ Enabled</option>
-            <option value="0">❌ Disabled</option>
-          </select>
-        </div>
+        <div class="fg"><label class="flbl">Trigger: Task Due Reminder</label><select class="fctl" id="wh-due-enabled"><option value="1">✅ Enabled</option><option value="0">❌ Disabled</option></select></div>
+        <div class="fg"><label class="flbl">Trigger: Escalation Alert</label><select class="fctl" id="wh-esc-enabled"><option value="1">✅ Enabled</option><option value="0">❌ Disabled</option></select></div>
+        <div class="fg"><label class="flbl">Trigger: Hourly Reminder</label><select class="fctl" id="wh-hourly-enabled"><option value="1">✅ Enabled</option><option value="0">❌ Disabled</option></select></div>
+        <div class="fg"><label class="flbl">Trigger: Task Completed</label><select class="fctl" id="wh-done-enabled"><option value="1">✅ Enabled</option><option value="0">❌ Disabled</option></select></div>
       </div>
-
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:12px">
-        <div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:8px">📦 Sample payload sent to your webhook</div>
-        <pre style="font-size:10px;color:var(--text3);white-space:pre-wrap;line-height:1.6">{
-  "event": "task_due",
-  "task_title": "Fix water pipe at ABC site",
-  "owner_name": "Ravi Kumar",
-  "owner_phone": "+919876543212",
-  "owner_email": "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0f7d6e79664f6c60216c6062">[email&#160;protected]</a>",
-  "priority": "high",
-  "status": "wip",
-  "due_date": "2025-04-15",
-  "due_time": "10:00",
-  "is_field_job": true,
-  "site": "ABC Factory",
-  "customer": "ABC Industries Ltd",
-  "customer_manager": "Suresh Patil",
-  "escalation_level": 0,
-  "escalation_manager_name": "",
-  "escalation_manager_phone": "",
-  "message": "⏰ Task Due: Fix water pipe at ABC site — Ravi Kumar",
-  "company": "Pushp Construction & Interior"
-}</pre>
-      </div>
-
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="testWebhook()">
-        🧪 Send Test Ping to Webhook
-      </button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px" onclick="testWebhook()">🧪 Send Test Ping to Webhook</button>
     </div>
     <div class="mfoot">
       <button class="btn btn-ghost" onclick="closeModal('webhook-modal')">Cancel</button>
@@ -901,8 +837,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
     </div>
   </div>
 </div>
-
-
 
 <!-- TEAM CALL MODAL -->
 <div class="moverlay" id="teamcall-modal">
@@ -915,7 +849,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
       <div style="text-align:center;padding:1rem 0 1.5rem">
         <div style="font-size:48px;margin-bottom:12px">📹</div>
         <div style="font-family:var(--font-head);font-size:18px;font-weight:700;margin-bottom:8px">Pushp CI Team Meeting</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:1.5rem">Powered by Jitsi Meet &mdash; Free, no account needed</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:1.5rem">Powered by Jitsi Meet — Free, no account needed</div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem">
         <div style="font-size:12px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Meeting Room Name</div>
@@ -923,7 +857,6 @@ textarea.fctl{resize:vertical;min-height:65px;}
           <input class="fctl" id="call-room-name" value="pushp-ci-team-meeting" style="flex:1"/>
           <button class="btn btn-ghost btn-sm" onclick="randomRoomName()" title="Random">🎲</button>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:8px">💡 Same room name share karo team ke saath</div>
       </div>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem">
         <div style="font-size:12px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">Share Link</div>
@@ -936,168 +869,138 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <button class="btn btn-primary" onclick="joinCall()" style="justify-content:center;padding:14px;font-size:15px">🚀 Join Meeting</button>
         <button class="btn btn-ghost" onclick="copyCallLink()" style="justify-content:center;padding:14px">🔗 Copy &amp; Share</button>
       </div>
-      <div style="margin-top:1.25rem;background:rgba(77,166,255,0.06);border:1px solid rgba(77,166,255,0.15);border-radius:var(--radius-sm);padding:12px 14px">
-        <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:6px">How to use</div>
-        <div style="font-size:12px;color:var(--text3);line-height:1.7">1. Room name same rakho<br>2. Copy &amp; Share se link team ko bhejo<br>3. Join Meeting click karo<br>4. Team bhi same link se join karein</div>
-      </div>
     </div>
   </div>
 </div>
+
 <div class="toast-stack" id="toast-stack"></div>
 
-<script>
-// ═══ API.JS — Pushp Construction TaskFlow ═══════════════
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const API_URL='https://pushp-taskflow-backend.onrender.com';
+function getToken(){return localStorage.getItem('taskflow_token');}
+function setToken(t){localStorage.setItem('taskflow_token',t);}
+function clearToken(){localStorage.removeItem('taskflow_token');localStorage.removeItem('taskflow_user');}
+function getHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+async function apiCall(method,endpoint,body=null){
+  try{const options={method,headers:getHeaders()};if(body)options.body=JSON.stringify(body);const res=await fetch(API_URL+endpoint,options);const data=await res.json();if(res.status===401){clearToken();window.location.reload();return null;}return data;}catch(err){console.error('API Error:',err);return null;}
+}
+const AuthAPI={
+  async login(username,password){const data=await apiCall('POST','/api/auth/login',{username,password});if(data?.success){setToken(data.token);localStorage.setItem('taskflow_user',JSON.stringify(data.user));}return data;},
+  async register(username,password,name,role){const data=await apiCall('POST','/api/auth/register',{username,password,name,role});if(data?.success){setToken(data.token);localStorage.setItem('taskflow_user',JSON.stringify(data.user));}return data;},
+  logout(){clearToken();window.location.reload();},
+  getCurrentUser(){const u=localStorage.getItem('taskflow_user');return u?JSON.parse(u):null;},
+  isLoggedIn(){return!!getToken();}
+};
+const TasksAPI={
+  getAll:(filters={})=>{const p=new URLSearchParams(filters).toString();return apiCall('GET','/api/tasks?'+p);},
+  getStats:()=>apiCall('GET','/api/tasks/stats'),
+  getOne:(id)=>apiCall('GET','/api/tasks/'+id),
+  create:(task)=>apiCall('POST','/api/tasks',task),
+  update:(id,data)=>apiCall('PUT','/api/tasks/'+id,data),
+  toggle:(id)=>apiCall('PATCH','/api/tasks/'+id+'/toggle'),
+  delete:(id)=>apiCall('DELETE','/api/tasks/'+id)
+};
+const MembersAPI={
+  getAll:()=>apiCall('GET','/api/members'),
+  getOne:(id)=>apiCall('GET','/api/members/'+id),
+  create:(member)=>apiCall('POST','/api/members',member),
+  update:(id,data)=>apiCall('PUT','/api/members/'+id,data),
+  delete:(id)=>apiCall('DELETE','/api/members/'+id)
+};
+const ActivityAPI={
+  getAll:(limit=50)=>apiCall('GET','/api/activity?limit='+limit),
+  log:(msg,type)=>apiCall('POST','/api/activity',{msg,type})
+};
+async function syncFromDB(){
+  if(!AuthAPI.isLoggedIn())return;
+  try{
+    const membersRes=await MembersAPI.getAll();
+    if(membersRes?.success){db.members=membersRes.members.map(m=>({id:m.id,name:m.name,role:m.role,phone:m.phone||'',email:m.email||'',color:m.color,type:m.type}));}
+    const tasksRes=await TasksAPI.getAll();
+    if(tasksRes?.success){db.tasks=tasksRes.tasks.map(t=>({id:t.id,title:t.title,description:t.description,ownerId:t.owner_id,status:t.status,priority:t.priority,category:t.category,dueDate:t.due_date,dueTime:t.due_time,done:t.done,escalated:t.escalated,isField:t.is_field,fieldJob:t.field_job,escalation:t.escalation||[],createdAt:t.created_at}));}
+    const actRes=await ActivityAPI.getAll(30);
+    if(actRes?.success){db.activity=actRes.activities.map(a=>({id:a.id,msg:a.msg,type:a.type,time:a.created_at}));}
+    if(typeof renderAll==='function')renderAll();
+  }catch(err){console.error('Sync error:',err);}
+}
+document.addEventListener('DOMContentLoaded',()=>{if(AuthAPI.isLoggedIn()){syncFromDB();setInterval(syncFromDB,30000);}});
 
-const API_URL = 'https://pushp-taskflow-backend.onrender.com';
+// ═══ PRESENCE SYSTEM ═══
+const SUPA_URL='https://msxqifrelaccpdvlohga.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zeHFpZnJlbGFjY3BkdmxvaGdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NDM4NDMsImV4cCI6MjA5MDUxOTg0M30.hmc3MbdPjTd8vUhw-n--IYld69a3yuDzu0rp4QvOiY0';
+let presenceChannel=null;
+let onlineUserIds=new Set();
 
-function getToken() { return localStorage.getItem('taskflow_token'); }
-function setToken(t) { localStorage.setItem('taskflow_token', t); }
-function clearToken() { localStorage.removeItem('taskflow_token'); localStorage.removeItem('taskflow_user'); }
-function getHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() }; }
-
-async function apiCall(method, endpoint, body = null) {
-  try {
-    const options = { method, headers: getHeaders() };
-    if (body) options.body = JSON.stringify(body);
-    const res = await fetch(API_URL + endpoint, options);
-    const data = await res.json();
-    if (res.status === 401) { clearToken(); window.location.reload(); return null; }
-    return data;
-  } catch (err) {
-    console.error('API Error:', err);
-    return null;
-  }
+async function initPresence(){
+  if(!currentUser)return;
+  try{
+    const{createClient}=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+    const supa=createClient(SUPA_URL,SUPA_KEY);
+    presenceChannel=supa.channel('presence-room',{config:{presence:{key:currentUser.id}}});
+    presenceChannel
+      .on('presence',{event:'sync'},()=>{
+        const state=presenceChannel.presenceState();
+        onlineUserIds=new Set();
+        Object.values(state).flat().forEach(u=>{
+          if(u.memberId)onlineUserIds.add(u.memberId);
+          onlineUserIds.add(u.userId);
+        });
+        updateAllPresenceDots();
+      })
+      .subscribe(async(status)=>{
+        if(status==='SUBSCRIBED'){
+          await presenceChannel.track({
+            userId:currentUser.id,
+            memberId:currentUser.memberId||null,
+            name:currentUser.name||currentUser.username
+          });
+        }
+      });
+  }catch(e){console.log('Presence error:',e);}
 }
 
-const AuthAPI = {
-  async login(username, password) {
-    const data = await apiCall('POST', '/api/auth/login', { username, password });
-    if (data?.success) { setToken(data.token); localStorage.setItem('taskflow_user', JSON.stringify(data.user)); }
-    return data;
-  },
-  async register(username, password, name, role) {
-    const data = await apiCall('POST', '/api/auth/register', { username, password, name, role });
-    if (data?.success) { setToken(data.token); localStorage.setItem('taskflow_user', JSON.stringify(data.user)); }
-    return data;
-  },
-  logout() { clearToken(); window.location.reload(); },
-  getCurrentUser() { const u = localStorage.getItem('taskflow_user'); return u ? JSON.parse(u) : null; },
-  isLoggedIn() { return !!getToken(); }
-};
+function isOnline(memberId){return onlineUserIds.has(memberId);}
 
-const TasksAPI = {
-  getAll: (filters = {}) => { const p = new URLSearchParams(filters).toString(); return apiCall('GET', '/api/tasks?' + p); },
-  getStats: () => apiCall('GET', '/api/tasks/stats'),
-  getOne: (id) => apiCall('GET', '/api/tasks/' + id),
-  create: (task) => apiCall('POST', '/api/tasks', task),
-  update: (id, data) => apiCall('PUT', '/api/tasks/' + id, data),
-  toggle: (id) => apiCall('PATCH', '/api/tasks/' + id + '/toggle'),
-  delete: (id) => apiCall('DELETE', '/api/tasks/' + id)
-};
-
-const MembersAPI = {
-  getAll: () => apiCall('GET', '/api/members'),
-  getOne: (id) => apiCall('GET', '/api/members/' + id),
-  create: (member) => apiCall('POST', '/api/members', member),
-  update: (id, data) => apiCall('PUT', '/api/members/' + id, data),
-  delete: (id) => apiCall('DELETE', '/api/members/' + id)
-};
-
-const ChatAPI = {
-  getMessages: (roomId, limit = 50) => apiCall('GET', '/api/chat/' + roomId + '?limit=' + limit),
-  send: (roomId, msg) => apiCall('POST', '/api/chat/' + roomId, msg),
-  delete: (msgId) => apiCall('DELETE', '/api/chat/message/' + msgId)
-};
-
-const ActivityAPI = {
-  getAll: (limit = 50) => apiCall('GET', '/api/activity?limit=' + limit),
-  log: (msg, type) => apiCall('POST', '/api/activity', { msg, type })
-};
-
-async function syncFromDB() {
-  if (!AuthAPI.isLoggedIn()) return;
-  try {
-    const membersRes = await MembersAPI.getAll();
-    if (membersRes?.success) {
-      db.members = membersRes.members.map(m => ({ id: m.id, name: m.name, role: m.role, phone: m.phone || '', email: m.email || '', color: m.color, type: m.type }));
+function updateAllPresenceDots(){
+  db.members.forEach(m=>{
+    const dot=document.getElementById('pdot-'+m.id);
+    const lbl=document.getElementById('plbl-'+m.id);
+    if(dot){
+      const online=isOnline(m.id);
+      dot.className='presence-dot '+(online?'online':'offline');
+      if(lbl){lbl.textContent=online?'● Online':'○ Offline';lbl.style.color=online?'var(--green)':'var(--text3)';}
     }
-    const tasksRes = await TasksAPI.getAll();
-    if (tasksRes?.success) {
-      db.tasks = tasksRes.tasks.map(t => ({ id: t.id, title: t.title, description: t.description, ownerId: t.owner_id, status: t.status, priority: t.priority, category: t.category, dueDate: t.due_date, dueTime: t.due_time, done: t.done, escalated: t.escalated, isField: t.is_field, fieldJob: t.field_job, escalation: t.escalation || [], createdAt: t.created_at }));
-    }
-    const actRes = await ActivityAPI.getAll(30);
-    if (actRes?.success) {
-      db.activity = actRes.activities.map(a => ({ id: a.id, msg: a.msg, type: a.type, time: a.created_at }));
-    }
-    if (typeof renderAll === 'function') renderAll();
-    console.log('✅ Database se sync ho gaya!');
-  } catch (err) { console.error('Sync error:', err); }
+  });
 }
+// ═══ END PRESENCE ═══
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (AuthAPI.isLoggedIn()) { syncFromDB(); setInterval(syncFromDB, 30000); }
-});
-
-// ═══ END API.JS ═══════════════════════════════════════════
-
-
-// ═══ DATA ═══════════════════════════════════════════
-// ── SESSION ──
-let currentUser = null; // {id, username, name, role:'admin'|'user', memberId}
-
-// ── DB ──
-let db = JSON.parse(localStorage.getItem('tfp2_db')||'null') || {
+// DATA
+let currentUser=null;
+let db=JSON.parse(localStorage.getItem('tfp2_db')||'null')||{
   members:[
     {id:'m1',name:'Arjun Mehta',role:'Sales Manager',phone:'+919876543210',email:'arjun@co.com',color:'#2e7d32',type:'office'},
     {id:'m2',name:'Priya Singh',role:'Field Engineer',phone:'+919876543211',email:'priya@co.com',color:'#2ecc8a',type:'field'},
     {id:'m3',name:'Ravi Kumar',role:'Technician',phone:'+919876543212',email:'ravi@co.com',color:'#f5a623',type:'both'},
   ],
-  tasks:[],
-  activity:[],
-  users:[
-    {id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}
-  ]
+  tasks:[],activity:[],
+  users:[{id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}]
 };
 function saveDB(){localStorage.setItem('tfp2_db',JSON.stringify(db));}
-
-// ── DB MIGRATION: ensure users array always exists (fixes old saved data) ──
-if(!db.users||!Array.isArray(db.users)){
-  db.users=[{id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}];
-  saveDB();
-}
-// ensure admin account always exists (can't be deleted)
-if(!db.users.find(u=>u.username==='admin')){
-  db.users.unshift({id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null});
-  saveDB();
-}
+if(!db.users||!Array.isArray(db.users)){db.users=[{id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}];saveDB();}
+if(!db.users.find(u=>u.username==='admin')){db.users.unshift({id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null});saveDB();}
 function isAdmin(){return currentUser&&currentUser.role==='admin';}
-function canEdit(task){
-  if(!currentUser)return false;
-  if(isAdmin())return true;
-  // user can edit/toggle tasks assigned to them
-  if(task.ownerId&&currentUser.memberId&&task.ownerId===currentUser.memberId)return true;
-  if(task.repId&&currentUser.memberId&&task.repId===currentUser.memberId)return true;
-  return false;
-}
-function myMemberId(){return currentUser?currentUser.memberId:null;}
-
-let taskFilter='all', escStepCount=0, editingId=null;
+function canEdit(task){if(!currentUser)return false;if(isAdmin())return true;if(task.ownerId&&currentUser.memberId&&task.ownerId===currentUser.memberId)return true;if(task.repId&&currentUser.memberId&&task.repId===currentUser.memberId)return true;return false;}
+let taskFilter='all',escStepCount=0,editingId=null;
 const COLORS=['#2e7d32','#c62828','#f5a623','#f05252','#4da6ff','#f06292','#26c6da','#795548'];
 
-
-// ═══ AUTH ═════════════════════════════════════════
+// AUTH
 function switchLoginTab(tab){
   document.getElementById('ltab-login').classList.toggle('active',tab==='login');
   document.getElementById('ltab-register').classList.toggle('active',tab==='register');
   document.getElementById('lpanel-login').style.display=tab==='login'?'':'none';
   document.getElementById('lpanel-register').style.display=tab==='register'?'':'none';
-  // populate member select
-  if(tab==='register'){
-    const sel=document.getElementById('r-member');
-    sel.innerHTML='<option value="">— Select your profile (optional) —</option>'+db.members.map(m=>`<option value="${m.id}">${m.name} (${m.role||''})</option>`).join('');
-  }
+  if(tab==='register'){const sel=document.getElementById('r-member');sel.innerHTML='<option value="">— Select your profile (optional) —</option>'+db.members.map(m=>`<option value="${m.id}">${m.name} (${m.role||''})</option>`).join('');}
 }
-
 async function doLogin(){
   const uname=document.getElementById('l-username').value.trim().toLowerCase();
   const pass=document.getElementById('l-password').value;
@@ -1110,24 +1013,17 @@ async function doLogin(){
   try{
     const res=await AuthAPI.login(uname,pass);
     if(btn){btn.textContent='Sign In →';btn.disabled=false;}
-    if(res&&res.success){
-      currentUser={id:res.user.id,username:res.user.username,name:res.user.name,role:res.user.role==='admin'?'admin':'user',memberId:null};
-      launchApp();return;
-    }
+    if(res&&res.success){currentUser={id:res.user.id,username:res.user.username,name:res.user.name,role:res.user.role==='admin'?'admin':'user',memberId:null};launchApp();return;}
     err.textContent=(res&&res.message)||'Login failed. Try again.';
   }catch(e){
     if(btn){btn.textContent='Sign In →';btn.disabled=false;}
-    // Fallback: local login
     if(!db.users||!Array.isArray(db.users)){db.users=[{id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}];saveDB();}
     const user=db.users.find(u=>u.username.toLowerCase()===uname);
     if(!user){err.textContent='Username not found.';return;}
     if(user.password!==pass){err.textContent='Wrong password.';return;}
-    currentUser=user;
-    localStorage.setItem('tfp2_session',JSON.stringify({id:user.id,username:user.username}));
-    launchApp();
+    currentUser=user;localStorage.setItem('tfp2_session',JSON.stringify({id:user.id,username:user.username}));launchApp();
   }
 }
-
 async function doRegister(){
   const name=document.getElementById('r-name').value.trim();
   const uname=document.getElementById('r-username').value.trim().toLowerCase();
@@ -1141,48 +1037,30 @@ async function doRegister(){
   try{
     const res=await AuthAPI.register(uname,pass,name,'member');
     if(btn){btn.textContent='Create Account →';btn.disabled=false;}
-    if(res&&res.success){
-      currentUser={id:res.user.id,username:res.user.username,name:res.user.name,role:res.user.role==='admin'?'admin':'user',memberId};
-      err.style.color='var(--green)';err.textContent='Account created! Signing you in...';
-      setTimeout(launchApp,600);return;
-    }
+    if(res&&res.success){currentUser={id:res.user.id,username:res.user.username,name:res.user.name,role:res.user.role==='admin'?'admin':'user',memberId};err.style.color='var(--green)';err.textContent='Account created!';setTimeout(launchApp,600);return;}
     err.style.color='var(--red)';err.textContent=(res&&res.message)||'Registration failed.';
   }catch(e){
     if(btn){btn.textContent='Create Account →';btn.disabled=false;}
     if(db.users.find(u=>u.username.toLowerCase()===uname)){err.style.color='var(--red)';err.textContent='Username already taken';return;}
     const newUser={id:'u'+uid(),username:uname,password:pass,name,role:'user',memberId};
     db.users.push(newUser);saveDB();
-    err.style.color='var(--green)';err.textContent='Account created! Signing you in...';
-    currentUser=newUser;
-    localStorage.setItem('tfp2_session',JSON.stringify({id:newUser.id,username:newUser.username}));
+    err.style.color='var(--green)';err.textContent='Account created!';
+    currentUser=newUser;localStorage.setItem('tfp2_session',JSON.stringify({id:newUser.id,username:newUser.username}));
     setTimeout(launchApp,600);
   }
 }
-
 function doLogout(){
   if(!confirm('Sign out?'))return;
   currentUser=null;
-  localStorage.removeItem('tfp2_session');
-  localStorage.removeItem('taskflow_token');
-  localStorage.removeItem('taskflow_user');
+  if(presenceChannel){presenceChannel.untrack();presenceChannel=null;}
+  localStorage.removeItem('tfp2_session');localStorage.removeItem('taskflow_token');localStorage.removeItem('taskflow_user');
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('app-layout').style.display='none';
-  document.getElementById('l-username').value='';
-  document.getElementById('l-password').value='';
-  document.getElementById('l-err').textContent='';
+  document.getElementById('l-username').value='';document.getElementById('l-password').value='';document.getElementById('l-err').textContent='';
   switchLoginTab('login');
 }
-
-function hardReset(){
-  if(!confirm('This will clear ALL saved data and reset to default. Your tasks will be lost. Continue?'))return;
-  localStorage.removeItem('tfp2_db');
-  localStorage.removeItem('tfp2_session');
-  localStorage.removeItem('tfp2_webhook');
-  location.reload();
-}
-
+function hardReset(){if(!confirm('Reset all data?'))return;localStorage.removeItem('tfp2_db');localStorage.removeItem('tfp2_session');localStorage.removeItem('tfp2_webhook');location.reload();}
 function renderAll(){renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();renderTeam();renderActivity();updateBadges();scheduleAll();}
-
 function launchApp(){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('app-layout').style.display='flex';
@@ -1191,46 +1069,30 @@ function launchApp(){
   const dot=document.getElementById('webhook-status-dot');
   if(dot){if(cfg.url){dot.textContent='✅ Webhook active';dot.style.color='var(--green)';}else{dot.textContent='Not configured';dot.style.color='var(--text3)';}}
   renderDashboard();updateBadges();scheduleAll();
-  syncFromDB();
-  setInterval(syncFromDB,30000);
+  syncFromDB();setInterval(syncFromDB,30000);
+  initPresence();
 }
-
 function applyRoleUI(){
   const admin=isAdmin();
-  // topbar badge
   const badge=document.getElementById('topbar-role-badge');
-  badge.style.display='';
-  badge.className='role-badge '+(admin?'role-admin':'role-user');
+  badge.style.display='';badge.className='role-badge '+(admin?'role-admin':'role-user');
   badge.textContent=(admin?'👑 Admin':'👤 '+(currentUser.name||'User'));
-  // hide admin-only nav items for regular users
   document.querySelectorAll('.admin-only').forEach(el=>el.style.display=admin?'':'none');
-  // hide new task button for non-admin (they can only update status of their own tasks)
   document.getElementById('btn-new-task').style.display=admin?'':'none';
-  // hide export wrap for non-admin
-  document.getElementById('export-wrap').style.display='none'; // will be shown on right pages
-  // update sidebar user pill
-  document.querySelector('.uname').textContent=currentUser.name||currentUser.username;
+  document.getElementById('export-wrap').style.display='none';
+  const unameEl=document.getElementById('uname-text');
+  if(unameEl)unameEl.textContent=currentUser.name||currentUser.username;
+  else document.querySelector('.uname').textContent=currentUser.name||currentUser.username;
   document.querySelector('.urole').textContent=admin?'Administrator':'Team Member';
   document.querySelector('.avatar').textContent=initials(currentUser.name||currentUser.username);
 }
-
 function tryRestoreSession(){
-  const saved=localStorage.getItem('tfp2_session');
-  if(!saved)return false;
-  try{
-    const s=JSON.parse(saved);
-    if(!db.users||!Array.isArray(db.users))return false;
-    const user=db.users.find(u=>u.id===s.id&&u.username===s.username);
-    if(!user)return false;
-    currentUser=user;
-    return true;
-  }catch(e){
-    localStorage.removeItem('tfp2_session');
-    return false;
-  }
+  const saved=localStorage.getItem('tfp2_session');if(!saved)return false;
+  try{const s=JSON.parse(saved);if(!db.users||!Array.isArray(db.users))return false;const user=db.users.find(u=>u.id===s.id&&u.username===s.username);if(!user)return false;currentUser=user;return true;}
+  catch(e){localStorage.removeItem('tfp2_session');return false;}
 }
 
-// ═══ UTILS ════════════════════════════════════════
+// UTILS
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
 function now(){return new Date().toISOString();}
 function fmtT(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return(hr>12?hr-12:hr||12)+':'+m+(hr>=12?' PM':' AM');}
@@ -1240,7 +1102,6 @@ function isOverdue(t){if(t.done)return false;if(!t.dueDate)return false;return n
 function getMember(id){return db.members.find(m=>m.id===id)||{name:'Unassigned',color:'#666',role:''};}
 function initials(n){return n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);}
 function log(msg,type='info'){db.activity.unshift({id:uid(),msg,type,time:now()});if(db.activity.length>100)db.activity=db.activity.slice(0,100);saveDB();}
-
 function getStatusBadge(t){
   if(t.done)return'<span class="badge badge-done">Done</span>';
   if(t.escalated)return'<span class="badge badge-escalated">Escalated</span>';
@@ -1248,7 +1109,7 @@ function getStatusBadge(t){
   return'<span class="badge badge-pending">Pending</span>';
 }
 
-// ═══ NAV ══════════════════════════════════════════
+// NAV
 function showView(name,el){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nitem').forEach(n=>n.classList.remove('active'));
@@ -1269,10 +1130,9 @@ function showView(name,el){
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('soverlay').classList.toggle('open');}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('soverlay').classList.remove('open');}
 
-// ═══ TOAST ════════════════════════════════════════
+// TOAST
 function toast(msg,type='success'){
-  const el=document.createElement('div');
-  el.className='toast '+type;
+  const el=document.createElement('div');el.className='toast '+type;
   el.textContent=(type==='success'?'✅ ':type==='warning'?'⚠️ ':type==='error'?'❌ ':'ℹ️ ')+msg;
   document.getElementById('toast-stack').appendChild(el);
   setTimeout(()=>el.classList.add('show'),10);
@@ -1280,123 +1140,76 @@ function toast(msg,type='success'){
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
+function toggleFieldSection(){const on=document.getElementById('f-isfield').checked;document.getElementById('field-fields').style.display=on?'block':'none';}
 
-// ═══ FIELD TOGGLE ═════════════════════════════════
-function toggleFieldSection(){
-  const on=document.getElementById('f-isfield').checked;
-  document.getElementById('field-fields').style.display=on?'block':'none';
-}
-
-// ═══ TASK MODAL ═══════════════════════════════════
+// TASK MODAL
 function populateOwnerSelect(selId,selectedId){
   const sel=document.getElementById(selId);
   sel.innerHTML=db.members.map(m=>`<option value="${m.id}"${m.id===selectedId?' selected':''}>${m.name}${m.role?' ('+m.role+')':''}</option>`).join('');
   if(!db.members.length)sel.innerHTML='<option value="">No members — add one first</option>';
 }
-
 function openAddTask(forceField){
   if(!isAdmin()){toast('Only admin can create tasks','error');return;}
-  editingId=null;
-  document.getElementById('modal-title').textContent='New Task';
-  document.getElementById('edit-id').value='';
+  editingId=null;document.getElementById('modal-title').textContent='New Task';document.getElementById('edit-id').value='';
   ['f-title','f-desc','f-site','f-address','f-customer','f-cphone','f-cmanager','f-cmanagerphone','f-sitenotes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('f-priority').value='medium';
-  document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
-  document.getElementById('f-time').value='';
-  document.getElementById('f-category').value=forceField?'Field Service':'Work';
-  document.getElementById('f-repeat').value='none';
-  document.getElementById('f-visitdate').value='';
-  document.getElementById('f-visittime').value='';
-  document.getElementById('f-isfield').checked=!!forceField;
-  document.getElementById('field-fields').style.display=forceField?'block':'none';
+  document.getElementById('f-priority').value='medium';document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-time').value='';document.getElementById('f-category').value=forceField?'Field Service':'Work';
+  document.getElementById('f-repeat').value='none';document.getElementById('f-visitdate').value='';document.getElementById('f-visittime').value='';
+  document.getElementById('f-isfield').checked=!!forceField;document.getElementById('field-fields').style.display=forceField?'block':'none';
   document.querySelectorAll('#ntogs .ntog').forEach(t=>t.classList.toggle('on',t.dataset.n==='browser'));
-  escStepCount=0;
-  document.getElementById('esc-steps-editor').innerHTML='';
+  escStepCount=0;document.getElementById('esc-steps-editor').innerHTML='';
   populateOwnerSelect('f-owner',null);
-  populateOwnerSelect('f-rep',null);
   document.getElementById('f-rep').innerHTML='<option value="">— Select rep —</option>'+db.members.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
   openModal('task-modal');
 }
-
 function openEditTask(id){
   const t=db.tasks.find(x=>x.id===id);if(!t)return;
   if(!canEdit(t)){toast('You can only edit your own tasks','error');return;}
-  editingId=id;
-  document.getElementById('modal-title').textContent='Edit Task';
-  document.getElementById('edit-id').value=id;
-  document.getElementById('f-title').value=t.title;
-  document.getElementById('f-desc').value=t.desc||'';
-  document.getElementById('f-priority').value=t.priority;
-  document.getElementById('f-date').value=t.dueDate||'';
-  document.getElementById('f-time').value=t.dueTime||'';
-  document.getElementById('f-category').value=t.category||'Work';
-  document.getElementById('f-repeat').value=t.repeat||'none';
-  // field job
+  editingId=id;document.getElementById('modal-title').textContent='Edit Task';document.getElementById('edit-id').value=id;
+  document.getElementById('f-title').value=t.title;document.getElementById('f-desc').value=t.desc||'';
+  document.getElementById('f-priority').value=t.priority;document.getElementById('f-date').value=t.dueDate||'';
+  document.getElementById('f-time').value=t.dueTime||'';document.getElementById('f-category').value=t.category||'Work';document.getElementById('f-repeat').value=t.repeat||'none';
   const fj=t.fieldJob||{};
-  document.getElementById('f-isfield').checked=!!t.isField;
-  document.getElementById('field-fields').style.display=t.isField?'block':'none';
-  document.getElementById('f-site').value=fj.site||'';
-  document.getElementById('f-address').value=fj.address||'';
-  document.getElementById('f-customer').value=fj.customer||'';
-  document.getElementById('f-cphone').value=fj.cphone||'';
-  document.getElementById('f-cmanager').value=fj.cmanager||'';
-  document.getElementById('f-cmanagerphone').value=fj.cmanagerphone||'';
-  document.getElementById('f-visitdate').value=fj.visitDate||'';
-  document.getElementById('f-visittime').value=fj.visitTime||'';
-  document.getElementById('f-sitenotes').value=fj.siteNotes||'';
+  document.getElementById('f-isfield').checked=!!t.isField;document.getElementById('field-fields').style.display=t.isField?'block':'none';
+  document.getElementById('f-site').value=fj.site||'';document.getElementById('f-address').value=fj.address||'';
+  document.getElementById('f-customer').value=fj.customer||'';document.getElementById('f-cphone').value=fj.cphone||'';
+  document.getElementById('f-cmanager').value=fj.cmanager||'';document.getElementById('f-cmanagerphone').value=fj.cmanagerphone||'';
+  document.getElementById('f-visitdate').value=fj.visitDate||'';document.getElementById('f-visittime').value=fj.visitTime||'';document.getElementById('f-sitenotes').value=fj.siteNotes||'';
   document.querySelectorAll('#ntogs .ntog').forEach(el=>el.classList.toggle('on',(t.notifs||[]).includes(el.dataset.n)));
   populateOwnerSelect('f-owner',t.ownerId);
-  const repSel=document.getElementById('f-rep');
-  repSel.innerHTML='<option value="">— Select rep —</option>'+db.members.map(m=>`<option value="${m.id}"${m.id===t.repId?' selected':''}>${m.name}</option>`).join('');
-  escStepCount=0;
-  document.getElementById('esc-steps-editor').innerHTML='';
-  (t.escalation||[]).forEach(s=>addEscStep(s));
-  openModal('task-modal');
+  document.getElementById('f-rep').innerHTML='<option value="">— Select rep —</option>'+db.members.map(m=>`<option value="${m.id}"${m.id===t.repId?' selected':''}>${m.name}</option>`).join('');
+  escStepCount=0;document.getElementById('esc-steps-editor').innerHTML='';
+  (t.escalation||[]).forEach(s=>addEscStep(s));openModal('task-modal');
 }
-
 function addEscStep(prefill){
-  escStepCount++;
-  const i=escStepCount;
-  const div=document.createElement('div');
-  div.id='es-'+i;
+  escStepCount++;const i=escStepCount;const div=document.createElement('div');div.id='es-'+i;
   div.style.cssText='background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px;';
-  div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-    <span style="font-size:12px;font-weight:600;color:var(--accent)">Level ${i} Escalation</span>
-    <button class="ibtn del" onclick="document.getElementById('es-${i}').remove()">✕</button>
-  </div>
+  div.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px"><span style="font-size:12px;font-weight:600;color:var(--accent)">Level ${i} Escalation</span><button class="ibtn del" onclick="document.getElementById('es-${i}').remove()">✕</button></div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
     <div class="fg"><label class="flbl">Escalate after (hours)</label><input class="fctl" id="es-delay-${i}" type="number" min="1" value="${prefill?prefill.delayHours:''}"/></div>
     <div class="fg"><label class="flbl">Notify Manager</label><select class="fctl" id="es-who-${i}">${db.members.map(m=>`<option value="${m.id}"${prefill&&prefill.managerId===m.id?' selected':''}>${m.name}</option>`).join('')}</select></div>
   </div>
-  <div style="margin-bottom:10px">
-    <div class="flbl" style="margin-bottom:6px">Channels</div>
+  <div style="margin-bottom:10px"><div class="flbl" style="margin-bottom:6px">Channels</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap" id="es-notifs-${i}">${['browser','whatsapp','sms','email','call'].map(n=>`<div class="ntog${prefill&&(prefill.notifs||[]).includes(n)?' on':''}" data-n="${n}" onclick="this.classList.toggle('on')">${{browser:'🔔',whatsapp:'💬',sms:'📱',email:'✉️',call:'📞'}[n]} ${n}</div>`).join('')}</div>
   </div>
   <div class="fg"><label class="flbl">Message (optional)</label><input class="fctl" id="es-msg-${i}" placeholder="Task overdue — please follow up" value="${prefill?prefill.message||'':''}"/></div>`;
   document.getElementById('esc-steps-editor').appendChild(div);
 }
-
 async function saveTask(){
-  const title=document.getElementById('f-title').value.trim();
-  const ownerId=document.getElementById('f-owner').value;
+  const title=document.getElementById('f-title').value.trim();const ownerId=document.getElementById('f-owner').value;
   if(!title){toast('Please enter a task title','error');return;}
   if(isAdmin()&&!ownerId){toast('Please assign an owner','error');return;}
   if(!isAdmin()&&editingId){
-    const t=db.tasks.find(x=>x.id===editingId);
-    if(!t||!canEdit(t)){toast('Permission denied','error');return;}
-    t.desc=document.getElementById('f-desc').value.trim();t.updatedAt=now();
-    saveDB();toast('Task updated','success');
+    const t=db.tasks.find(x=>x.id===editingId);if(!t||!canEdit(t)){toast('Permission denied','error');return;}
+    t.desc=document.getElementById('f-desc').value.trim();t.updatedAt=now();saveDB();toast('Task updated','success');
     closeModal('task-modal');renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
-    try{await TasksAPI.update(editingId,{done:t.done,description:t.desc});}catch(e){}
-    return;
+    try{await TasksAPI.update(editingId,{done:t.done,description:t.desc});}catch(e){}return;
   }
   const notifs=Array.from(document.querySelectorAll('#ntogs .ntog.on')).map(x=>x.dataset.n);
   const escalation=[];
   for(let i=1;i<=20;i++){
     const stepEl=document.getElementById('es-'+i);if(!stepEl)continue;
-    const delay=document.getElementById('es-delay-'+i)?.value;
-    const who=document.getElementById('es-who-'+i)?.value;
-    const msg=document.getElementById('es-msg-'+i)?.value||'';
+    const delay=document.getElementById('es-delay-'+i)?.value;const who=document.getElementById('es-who-'+i)?.value;const msg=document.getElementById('es-msg-'+i)?.value||'';
     const ns=Array.from(stepEl.querySelectorAll('.ntog.on')).map(x=>x.dataset.n);
     if(delay&&who)escalation.push({level:escalation.length+1,delayHours:parseInt(delay),managerId:who,notifs:ns,message:msg,triggered:false});
   }
@@ -1405,31 +1218,22 @@ async function saveTask(){
   const repId=document.getElementById('f-rep').value||null;
   const localTask={id:editingId||uid(),title,desc:document.getElementById('f-desc').value.trim(),ownerId,repId,priority:document.getElementById('f-priority').value,dueDate:document.getElementById('f-date').value,dueTime:document.getElementById('f-time').value,category:document.getElementById('f-category').value,repeat:document.getElementById('f-repeat').value,notifs,escalation,isField,fieldJob,done:false,escalated:false,createdAt:editingId?(db.tasks.find(x=>x.id===editingId)||{}).createdAt||now():now(),updatedAt:now()};
   if(editingId){
-    const idx=db.tasks.findIndex(x=>x.id===editingId);
-    localTask.done=db.tasks[idx]?.done||false;localTask.escalated=db.tasks[idx]?.escalated||false;
-    db.tasks[idx]=localTask;
-    log('Task "'+title+'" updated');toast('Task updated');
+    const idx=db.tasks.findIndex(x=>x.id===editingId);localTask.done=db.tasks[idx]?.done||false;localTask.escalated=db.tasks[idx]?.escalated||false;
+    db.tasks[idx]=localTask;log('Task "'+title+'" updated');toast('Task updated');
     try{await TasksAPI.update(editingId,{title,description:localTask.desc,owner_id:ownerId,priority:localTask.priority,due_date:localTask.dueDate||null,due_time:localTask.dueTime||null,category:localTask.category,is_field:isField,field_job:fieldJob,escalation,done:localTask.done});}catch(e){}
-  } else {
-    db.tasks.push(localTask);
-    log('Task "'+title+'" assigned to '+getMember(ownerId).name+(isField?' [Field Job]':''));toast('Task created!');
-    try{
-      const res=await TasksAPI.create({title,description:localTask.desc,owner_id:ownerId,rep_id:repId,priority:localTask.priority,due_date:localTask.dueDate||null,due_time:localTask.dueTime||null,category:localTask.category,is_field:isField,field_job:fieldJob,escalation,done:false,escalated:false});
-      if(res&&res.success&&res.task){const tidx=db.tasks.findIndex(x=>x.id===localTask.id);if(tidx>=0)db.tasks[tidx].id=res.task.id;saveDB();}
-    }catch(e){console.log('Task sync err',e);}
+  }else{
+    db.tasks.push(localTask);log('Task "'+title+'" assigned to '+getMember(ownerId).name+(isField?' [Field Job]':''));toast('Task created!');
+    try{const res=await TasksAPI.create({title,description:localTask.desc,owner_id:ownerId,rep_id:repId,priority:localTask.priority,due_date:localTask.dueDate||null,due_time:localTask.dueTime||null,category:localTask.category,is_field:isField,field_job:fieldJob,escalation,done:false,escalated:false});if(res&&res.success&&res.task){const tidx=db.tasks.findIndex(x=>x.id===localTask.id);if(tidx>=0)db.tasks[tidx].id=res.task.id;saveDB();}}catch(e){}
   }
-  saveDB();scheduleAll();closeModal('task-modal');
-  renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
+  saveDB();scheduleAll();closeModal('task-modal');renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
 }
 
-// ═══ MEMBER MODAL ═════════════════════════════════
+// MEMBER MODAL
 function openAddMember(){if(!isAdmin()){toast('Admin only','error');return;}['m-name','m-role','m-phone','m-email'].forEach(id=>document.getElementById(id).value='');document.getElementById('m-type').value='office';openModal('member-modal');}
 async function saveMember(){
-  const name=document.getElementById('m-name').value.trim();
-  if(!name){toast('Name required','error');return;}
+  const name=document.getElementById('m-name').value.trim();if(!name){toast('Name required','error');return;}
   const md={name,role:document.getElementById('m-role').value.trim(),phone:document.getElementById('m-phone').value.trim(),email:document.getElementById('m-email').value.trim(),color:COLORS[db.members.length%COLORS.length],type:document.getElementById('m-type').value};
-  const tmpId='m_'+uid();
-  db.members.push({id:tmpId,...md});saveDB();closeModal('member-modal');renderTeam();
+  const tmpId='m_'+uid();db.members.push({id:tmpId,...md});saveDB();closeModal('member-modal');renderTeam();
   log('New member '+name+' added');toast('Member added: '+name);
   try{const res=await MembersAPI.create(md);if(res&&res.success&&res.member){const i=db.members.findIndex(m=>m.id===tmpId);if(i>=0)db.members[i].id=res.member.id;saveDB();}}catch(e){}
 }
@@ -1437,23 +1241,19 @@ async function deleteMember(id){
   if(!isAdmin()){toast('Admin only','error');return;}
   const m=db.members.find(x=>x.id===id);if(!m)return;
   const hasTasks=db.tasks.some(t=>t.ownerId===id);
-  if(hasTasks&&!confirm('"'+m.name+'" has tasks assigned. Deleting will unassign them. Continue?'))return;
-  if(!hasTasks&&!confirm('Delete "'+m.name+'" from team?'))return;
+  if(hasTasks&&!confirm('"'+m.name+'" has tasks. Delete anyway?'))return;
+  if(!hasTasks&&!confirm('Delete "'+m.name+'"?'))return;
   db.tasks.forEach(t=>{if(t.ownerId===id)t.ownerId='';if(t.repId===id)t.repId='';});
-  db.members=db.members.filter(x=>x.id!==id);
-  log('Member '+m.name+' removed','warning');saveDB();toast('Member removed','warning');
+  db.members=db.members.filter(x=>x.id!==id);log('Member '+m.name+' removed','warning');saveDB();toast('Member removed','warning');
   renderTeam();renderDashboard();renderTaskList();
   try{await MembersAPI.delete(id);}catch(e){}
 }
 
-// ═══ RENDER TASK ITEM ═════════════════════════════
+// RENDER TASK ITEM
 function renderTaskItem(task,compact){
-  const owner=getMember(task.ownerId);
-  const rep=task.repId?getMember(task.repId):null;
-  const fj=task.fieldJob;
-  const over=isOverdue(task);
+  const owner=getMember(task.ownerId);const rep=task.repId?getMember(task.repId):null;const fj=task.fieldJob;const over=isOverdue(task);
   const pLabels={high:'High',medium:'Medium',low:'Low'};
-  return `<div class="titem" id="ti-${task.id}">
+  return`<div class="titem" id="ti-${task.id}">
     <div class="chk${task.done?' done':''}" onclick="toggleTask('${task.id}')"></div>
     <div class="tcontent">
       <div class="trow1">
@@ -1474,25 +1274,34 @@ function renderTaskItem(task,compact){
         ${fj&&fj.site?`<span class="tmeta">📍 ${fj.site}</span>`:''}
         ${task.escalation&&task.escalation.length?`<span class="tmeta" style="color:var(--pink)">🔺 ${task.escalation.length} escalation${task.escalation.length>1?'s':''}</span>`:''}
       </div>
-      ${task.isField&&fj?`<div class="field-card">
-        <div class="field-card-head">📍 Field Job Details</div>
-        <div class="field-grid">
-          ${fj.site?`<div class="field-row"><span class="field-lbl">Site</span><span class="field-val">${fj.site}</span></div>`:''}
-          ${fj.address?`<div class="field-row"><span class="field-lbl">Address</span><span class="field-val">${fj.address}</span></div>`:''}
-          ${fj.customer?`<div class="field-row"><span class="field-lbl">Customer</span><span class="field-val">${fj.customer}</span></div>`:''}
-          ${fj.cphone?`<div class="field-row"><span class="field-lbl">Customer Phone</span><span class="field-val">${fj.cphone}</span></div>`:''}
-          ${fj.cmanager?`<div class="field-row"><span class="field-lbl">Their Manager</span><span class="field-val">${fj.cmanager}</span></div>`:''}
-          ${fj.cmanagerphone?`<div class="field-row"><span class="field-lbl">Manager Phone</span><span class="field-val">${fj.cmanagerphone}</span></div>`:''}
-          ${fj.visitDate?`<div class="field-row"><span class="field-lbl">Visit Date</span><span class="field-val">${fmtD(fj.visitDate)}${fj.visitTime?' '+fmtT(fj.visitTime):''}</span></div>`:''}
-          ${rep?`<div class="field-row"><span class="field-lbl">Our Rep</span><span class="field-val">${rep.name}</span></div>`:''}
-          ${fj.siteNotes?`<div class="field-row" style="grid-column:1/-1"><span class="field-lbl">Notes</span><span class="field-val">${fj.siteNotes}</span></div>`:''}
+      ${task.isField&&fj?`<div class="field-card"><div class="field-card-head">📍 Field Job Details</div><div class="field-grid">
+        ${fj.site?`<div class="field-row"><span class="field-lbl">Site</span><span class="field-val">${fj.site}</span></div>`:''}
+        ${fj.address?`<div class="field-row"><span class="field-lbl">Address</span><span class="field-val">${fj.address}</span></div>`:''}
+        ${fj.customer?`<div class="field-row"><span class="field-lbl">Customer</span><span class="field-val">${fj.customer}</span></div>`:''}
+        ${fj.cphone?`<div class="field-row"><span class="field-lbl">Customer Phone</span><span class="field-val">${fj.cphone}</span></div>`:''}
+        ${fj.cmanager?`<div class="field-row"><span class="field-lbl">Their Manager</span><span class="field-val">${fj.cmanager}</span></div>`:''}
+        ${fj.cmanagerphone?`<div class="field-row"><span class="field-lbl">Manager Phone</span><span class="field-val">${fj.cmanagerphone}</span></div>`:''}
+        ${fj.visitDate?`<div class="field-row"><span class="field-lbl">Visit Date</span><span class="field-val">${fmtD(fj.visitDate)}${fj.visitTime?' '+fmtT(fj.visitTime):''}</span></div>`:''}
+        ${rep?`<div class="field-row"><span class="field-lbl">Our Rep</span><span class="field-val">${rep.name}</span></div>`:''}
+        ${fj.siteNotes?`<div class="field-row" style="grid-column:1/-1"><span class="field-lbl">Notes</span><span class="field-val">${fj.siteNotes}</span></div>`:''}
+      </div></div>`:''}
+    </div>
+      ${task.location?`<div style="margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="gps-badge">📍 ${task.location.address||'Location captured'}</span>
+        <a class="gps-map-link" href="https://maps.google.com/?q=${task.location.lat},${task.location.lng}" target="_blank">🗺 View on Map</a>
+        <span style="font-size:10px;color:var(--text3)">${task.location.time?'@ '+new Date(task.location.time).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}):''}</span>
+      </div>`:''}
+      ${!compact?`<div class="comment-section">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:6px">💬 Comments <span style="background:var(--bg3);padding:1px 6px;border-radius:10px;font-size:10px">${(task.comments||[]).length}</span></div>
+        ${(task.comments||[]).map(c=>{const cm=getMember(c.memberId);return`<div class="comment-item"><div class="comment-av" style="background:${cm.color||'#555'}">${initials(cm.name||c.author||'?')}</div><div class="comment-body"><div class="comment-author">${c.author||cm.name}</div><div class="comment-text">${c.text}</div><div class="comment-time">${fmtAgo(c.time)}</div></div></div>`;}).join('')}
+        <div class="comment-input-row">
+          <textarea class="comment-input" id="ci-${task.id}" placeholder="Add a comment..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addComment('${task.id}')}"></textarea>
+          <button class="btn btn-ghost btn-sm" onclick="addComment('${task.id}')" style="flex-shrink:0;align-self:flex-end">Send</button>
+          ${task.isField?`<button class="btn btn-ghost btn-sm" onclick="captureGPS('${task.id}')" style="flex-shrink:0;align-self:flex-end;color:var(--teal);border-color:rgba(38,198,218,0.3)" title="Capture my location">📍 GPS</button>`:''}
         </div>
       </div>`:''}
     </div>
-    ${!compact?(canEdit(task)?`<div class="tacts">
-      <button class="ibtn" onclick="openEditTask('${task.id}')" title="Edit">✏️</button>
-      ${isAdmin()?`<button class="ibtn del" onclick="deleteTask('${task.id}')" title="Delete">🗑</button>`:''}
-    </div>`:`<div class="tacts"><span class="locked-tip">👁 View only</span></div>`):''}
+    ${!compact?(canEdit(task)?`<div class="tacts"><button class="ibtn" onclick="openEditTask('${task.id}')" title="Edit">✏️</button>${isAdmin()?`<button class="ibtn del" onclick="deleteTask('${task.id}')" title="Delete">🗑</button>`:''}</div>`:`<div class="tacts"><span class="locked-tip">👁 View only</span></div>`):''}
   </div>`;
 }
 
@@ -1509,21 +1318,17 @@ async function deleteTask(id){
   const t=db.tasks.find(x=>x.id===id);if(!t)return;
   if(!isAdmin()){toast('Only admin can delete tasks','error');return;}
   if(!confirm('Delete "'+t.title+'"?'))return;
-  db.tasks=db.tasks.filter(x=>x.id!==id);
-  log('Task "'+t.title+'" deleted','warning');
-  saveDB();toast('Deleted','warning');
+  db.tasks=db.tasks.filter(x=>x.id!==id);log('Task "'+t.title+'" deleted','warning');saveDB();toast('Deleted','warning');
   renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
   try{await TasksAPI.delete(id);}catch(e){}
 }
 
-// ═══ RENDER VIEWS ═════════════════════════════════
+// RENDER VIEWS
 function renderDashboard(){
   const total=db.tasks.length,done=db.tasks.filter(t=>t.done).length,field=db.tasks.filter(t=>t.isField).length;
-  document.getElementById('ds-total').textContent=total;
-  document.getElementById('ds-done').textContent=done;
+  document.getElementById('ds-total').textContent=total;document.getElementById('ds-done').textContent=done;
   document.getElementById('ds-pct').textContent=total?Math.round(done/total*100)+'% rate':'0% rate';
-  document.getElementById('ds-pending').textContent=total-done;
-  document.getElementById('ds-field').textContent=field;
+  document.getElementById('ds-pending').textContent=total-done;document.getElementById('ds-field').textContent=field;
   const recent=[...db.tasks].sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)).slice(0,5);
   document.getElementById('dash-recent').innerHTML=recent.length?recent.map(t=>renderTaskItem(t,true)).join(''):'<div style="color:var(--text3);font-size:13px;padding:1rem 0;text-align:center">No tasks yet</div>';
   document.getElementById('dash-team').innerHTML=db.members.map(m=>{
@@ -1531,6 +1336,7 @@ function renderDashboard(){
     return`<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
       <div class="oavatar" style="background:${m.color};width:22px;height:22px;font-size:10px">${initials(m.name)}</div>
       <span style="font-size:13px;color:var(--text2);flex:1">${m.name}</span>
+      <div class="presence-dot ${isOnline(m.id)?'online':'offline'}" style="margin-right:4px"></div>
       <span style="font-size:12px;color:var(--text3)">${md}/${mt.length}</span>
       <span style="font-size:12px;font-weight:600;color:${pct===100?'var(--green)':pct>50?'var(--amber)':'var(--text2)'}">${pct}%</span>
     </div><div class="prog-wrap"><div class="prog-bar" style="width:${pct}%;background:${m.color}"></div></div></div>`;
@@ -1559,21 +1365,15 @@ function renderFieldJobs(){
   const listEl=document.getElementById('field-list'),emptyEl=document.getElementById('field-empty');
   if(!fieldTasks.length){listEl.innerHTML='';emptyEl.style.display='';return;}
   emptyEl.style.display='none';
-  // Group by customer
   const byCust={};
   fieldTasks.forEach(t=>{const c=(t.fieldJob&&t.fieldJob.customer)||'Unspecified Customer';if(!byCust[c])byCust[c]=[];byCust[c].push(t);});
   listEl.innerHTML=Object.entries(byCust).map(([cust,tasks])=>{
-    const done=tasks.filter(t=>t.done).length;
-    const rep=tasks[0].repId?getMember(tasks[0].repId):null;
-    const fj=tasks[0].fieldJob||{};
+    const done=tasks.filter(t=>t.done).length;const rep=tasks[0].repId?getMember(tasks[0].repId):null;const fj=tasks[0].fieldJob||{};
     return`<div class="panel" style="margin-bottom:1rem;overflow:visible">
       <div class="ph" style="background:rgba(38,198,218,.04)">
-        <div>
-          <div style="font-size:15px;font-weight:600;color:var(--text)">🏢 ${cust}</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:2px">${fj.site?'📍 '+fj.site+' · ':''}${fj.address||''}</div>
-        </div>
+        <div><div style="font-size:15px;font-weight:600;color:var(--text)">🏢 ${cust}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${fj.site?'📍 '+fj.site+' · ':''}${fj.address||''}</div></div>
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          ${fj.cmanager?`<span style="font-size:12px;color:var(--text3)">Their manager: <strong style="color:var(--text2)">${fj.cmanager}</strong>${fj.cmanagerphone?' · '+fj.cmanagerphone:''}</span>`:''}
+          ${fj.cmanager?`<span style="font-size:12px;color:var(--text3)">Their manager: <strong style="color:var(--text2)">${fj.cmanager}</strong></span>`:''}
           ${rep?`<span style="font-size:12px;color:var(--text3)">Our rep: <strong style="color:var(--accent)">${rep.name}</strong></span>`:''}
           <span class="badge badge-info">${done}/${tasks.length} done</span>
         </div>
@@ -1599,21 +1399,16 @@ function renderEscalation(){
         </div>
         <div style="display:flex;gap:8px;align-items:center">${getStatusBadge(task)}${over&&!task.done?'<span class="badge badge-overdue">Overdue</span>':''}<button class="btn btn-ghost btn-sm" onclick="openEditTask('${task.id}')">Edit</button></div>
       </div>
-      <div class="esc-steps">
-        <div class="esc-line"></div>
+      <div class="esc-steps"><div class="esc-line"></div>
         <div class="estep"><div class="sdot${task.done?' done':over?' triggered':''}">1</div>
-          <div class="sbody"><div class="stitle">Task Assigned — Owner Notified</div>
-            <div class="smeta"><span class="swho">👤 ${owner.name}</span><span>At creation</span></div>
-          </div>
+          <div class="sbody"><div class="stitle">Task Assigned — Owner Notified</div><div class="smeta"><span class="swho">👤 ${owner.name}</span><span>At creation</span></div></div>
         </div>
-        ${task.escalation.map((step,i)=>{const mgr=getMember(step.managerId);const s=sc(step,task);return`<div class="estep">
-          <div class="sdot${s?' '+s:''}">${i+2}</div>
+        ${task.escalation.map((step,i)=>{const mgr=getMember(step.managerId);const s=sc(step,task);return`<div class="estep"><div class="sdot${s?' '+s:''}">${i+2}</div>
           <div class="sbody" style="${s==='triggered'?'border-color:rgba(240,82,82,.3)':s==='active-now'?'border-color:rgba(245,166,35,.3)':''}">
             <div class="stitle">Level ${step.level}: Escalate to ${mgr.name}</div>
-            <div class="smeta"><span class="swho">👤 ${mgr.name} (${mgr.role||'Manager'})</span><span>After ${step.delayHours}h</span>${step.triggered?'<span style="color:var(--red)">⚡ Triggered</span>':s==='active-now'?'<span style="color:var(--amber)">⏰ Monitoring</span>':''}</div>
+            <div class="smeta"><span class="swho">👤 ${mgr.name}</span><span>After ${step.delayHours}h</span>${step.triggered?'<span style="color:var(--red)">⚡ Triggered</span>':s==='active-now'?'<span style="color:var(--amber)">⏰ Monitoring</span>':''}</div>
             ${step.message?`<div style="font-size:12px;color:var(--text3);margin-top:4px;font-style:italic">"${step.message}"</div>`:''}
-          </div>
-        </div>`;}).join('')}
+          </div></div>`;}).join('')}
       </div>
     </div>`;
   }).join('');
@@ -1621,55 +1416,27 @@ function renderEscalation(){
 
 function renderAnalytics(){
   const tasks=db.tasks,total=tasks.length,done=tasks.filter(t=>t.done).length;
-  const over=tasks.filter(t=>isOverdue(t)).length,esc=tasks.filter(t=>t.escalated).length;
-  const field=tasks.filter(t=>t.isField).length,pend=tasks.filter(t=>!t.done&&!isOverdue(t)).length;
+  const over=tasks.filter(t=>isOverdue(t)).length,field=tasks.filter(t=>t.isField).length,pend=tasks.filter(t=>!t.done&&!isOverdue(t)).length;
   const pct=total?Math.round(done/total*100):0;
-  document.getElementById('anl-rate').textContent=pct+'%';
-  document.getElementById('anl-done').textContent=done;
-  document.getElementById('anl-over').textContent=over;
-  document.getElementById('anl-field').textContent=field;
-  document.getElementById('dpct').textContent=pct+'%';
-  document.getElementById('leg-done').textContent=done;
-  document.getElementById('leg-pend').textContent=pend;
-  document.getElementById('leg-over').textContent=over;
-  document.getElementById('leg-field').textContent=field;
+  document.getElementById('anl-rate').textContent=pct+'%';document.getElementById('anl-done').textContent=done;document.getElementById('anl-over').textContent=over;document.getElementById('anl-field').textContent=field;
+  document.getElementById('dpct').textContent=pct+'%';document.getElementById('leg-done').textContent=done;document.getElementById('leg-pend').textContent=pend;document.getElementById('leg-over').textContent=over;document.getElementById('leg-field').textContent=field;
   drawDonut(done,pend,over,field,total);
-  ['high','medium','low'].forEach(p=>{
-    const pt=tasks.filter(t=>t.priority===p),pd=pt.filter(t=>t.done).length,pp=pt.length?Math.round(pd/pt.length*100):0;
-    const k=p[0];
-    document.getElementById('pri-'+k+'-bar').style.width=pp+'%';
-    document.getElementById('pri-'+k+'-lbl').textContent=pd+'/'+pt.length+' ('+pp+'%)';
-  });
+  ['high','medium','low'].forEach(p=>{const pt=tasks.filter(t=>t.priority===p),pd=pt.filter(t=>t.done).length,pp=pt.length?Math.round(pd/pt.length*100):0;const k=p[0];document.getElementById('pri-'+k+'-bar').style.width=pp+'%';document.getElementById('pri-'+k+'-lbl').textContent=pd+'/'+pt.length+' ('+pp+'%)';});
   const cats=[...new Set(tasks.map(t=>t.category||'Other'))];
-  document.getElementById('cat-bars').innerHTML=cats.map(c=>{
-    const ct=tasks.filter(t=>(t.category||'Other')===c),cd=ct.filter(t=>t.done).length,cp=ct.length?Math.round(cd/ct.length*100):0;
-    return`<div class="bar-row"><div class="bar-lbl">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${cp}%;background:var(--accent)"></div></div><div class="bar-pct" style="color:var(--accent)">${cp}%</div></div>`;
-  }).join('')||'<div style="color:var(--text3);font-size:13px">No tasks yet</div>';
+  document.getElementById('cat-bars').innerHTML=cats.map(c=>{const ct=tasks.filter(t=>(t.category||'Other')===c),cd=ct.filter(t=>t.done).length,cp=ct.length?Math.round(cd/ct.length*100):0;return`<div class="bar-row"><div class="bar-lbl">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${cp}%;background:var(--accent)"></div></div><div class="bar-pct" style="color:var(--accent)">${cp}%</div></div>`;}).join('')||'<div style="color:var(--text3);font-size:13px">No tasks yet</div>';
   document.getElementById('member-perf').innerHTML=db.members.map(m=>{
     const mt=tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mo=mt.filter(t=>isOverdue(t)).length,me=mt.filter(t=>t.escalated).length,mf=mt.filter(t=>t.isField).length,mp=mt.length?Math.round(md/mt.length*100):0;
-    return`<div style="margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-        <div class="oavatar" style="background:${m.color};width:26px;height:26px;font-size:10px">${initials(m.name)}</div>
-        <span style="font-size:13px;font-weight:500;flex:1">${m.name}</span>
-        ${mf?`<span class="badge badge-field">📍 ${mf}</span>`:''}
-        ${mo?`<span class="badge badge-overdue">${mo} overdue</span>`:''}
-        ${me?`<span class="badge badge-escalated">${me} esc</span>`:''}
-        <span style="font-size:14px;font-weight:700;color:${mp>=80?'var(--green)':mp>=50?'var(--amber)':'var(--red)'};min-width:38px;text-align:right">${mp}%</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="bar-track" style="flex:1;height:10px"><div class="bar-fill" style="width:${mp}%;background:${m.color}"></div></div>
-        <span style="font-size:12px;color:var(--text3)">${md}/${mt.length}</span>
-      </div>
-    </div>`;
+    return`<div style="margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <div class="oavatar" style="background:${m.color};width:26px;height:26px;font-size:10px">${initials(m.name)}</div>
+      <span style="font-size:13px;font-weight:500;flex:1">${m.name}</span>
+      ${mf?`<span class="badge badge-field">📍 ${mf}</span>`:''}${mo?`<span class="badge badge-overdue">${mo} overdue</span>`:''}${me?`<span class="badge badge-escalated">${me} esc</span>`:''}
+      <span style="font-size:14px;font-weight:700;color:${mp>=80?'var(--green)':mp>=50?'var(--amber)':'var(--red)'};min-width:38px;text-align:right">${mp}%</span>
+    </div><div style="display:flex;align-items:center;gap:8px"><div class="bar-track" style="flex:1;height:10px"><div class="bar-fill" style="width:${mp}%;background:${m.color}"></div></div><span style="font-size:12px;color:var(--text3)">${md}/${mt.length}</span></div></div>`;
   }).join('')||'<div style="color:var(--text3);font-size:13px">No members yet</div>';
   const days=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d.toISOString().split('T')[0];});
   const counts=days.map(d=>tasks.filter(t=>t.createdAt&&t.createdAt.startsWith(d)).length);
-  const maxC=Math.max(...counts,1);
-  const dNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  document.getElementById('spark-wrap').innerHTML=counts.map((c,i)=>{
-    const h=Math.round((c/maxC)*70)+8;
-    return`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:11px;color:var(--text3)">${c||''}</span><div style="width:100%;height:${h}px;background:var(--accent);opacity:${0.4+0.6*(c/maxC)};border-radius:4px 4px 0 0"></div></div>`;
-  }).join('');
+  const maxC=Math.max(...counts,1);const dNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('spark-wrap').innerHTML=counts.map((c,i)=>{const h=Math.round((c/maxC)*70)+8;return`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:11px;color:var(--text3)">${c||''}</span><div style="width:100%;height:${h}px;background:var(--accent);opacity:${0.4+0.6*(c/maxC)};border-radius:4px 4px 0 0"></div></div>`;}).join('');
   document.getElementById('spark-labels').innerHTML=days.map(d=>`<span style="font-size:11px;color:var(--text3);flex:1;text-align:center">${dNames[new Date(d+'T12:00').getDay()]}</span>`).join('');
 }
 
@@ -1687,12 +1454,19 @@ function renderTeam(){
     const mt=db.tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,me=mt.filter(t=>t.escalated).length,mf=mt.filter(t=>t.isField).length,pct=mt.length?Math.round(md/mt.length*100):0;
     const typeColors={office:'var(--blue)',field:'var(--teal)',both:'var(--accent)'};
     const typeLabels={office:'Office',field:'Field',both:'Office + Field'};
+    const online=isOnline(m.id);
     return`<div class="tc">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px">
         <div class="tc-av" style="background:${m.color}">${initials(m.name)}</div>
         <button class="ibtn del" onclick="deleteMember('${m.id}')" title="Remove" style="font-size:12px;opacity:.5">🗑</button>
       </div>
-      <div class="tc-name">${m.name}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+        <div class="tc-name" style="margin-bottom:0">${m.name}</div>
+        <div style="display:flex;align-items:center;gap:5px">
+          <div class="presence-dot ${online?'online':'offline'}" id="pdot-${m.id}"></div>
+          <span id="plbl-${m.id}" style="font-size:10px;color:${online?'var(--green)':'var(--text3)'}">${online?'● Online':'○ Offline'}</span>
+        </div>
+      </div>
       <div class="tc-role">${m.role||'Team Member'}</div>
       <div style="margin-bottom:8px"><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,0.06);color:${typeColors[m.type||'office']}">${typeLabels[m.type||'office']}</span></div>
       ${m.phone?`<div style="font-size:12px;color:var(--text3);margin-bottom:2px">📱 ${m.phone}</div>`:''}
@@ -1705,10 +1479,7 @@ function renderTeam(){
         <div class="tcs"><div class="n" style="color:${me>0?'var(--red)':'var(--text2)'}">${me}</div><div class="l">Esc.</div></div>
       </div>
     </div>`;
-  }).join('')+`<div class="tc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:180px" onclick="openAddMember()">
-    <div style="font-size:28px;margin-bottom:8px">+</div>
-    <div style="font-size:13px;color:var(--text3)">Add member</div>
-  </div>`;
+  }).join('')+`<div class="tc" style="border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:180px" onclick="openAddMember()"><div style="font-size:28px;margin-bottom:8px">+</div><div style="font-size:13px;color:var(--text3)">Add member</div></div>`;
 }
 
 function renderActivity(){
@@ -1721,586 +1492,253 @@ function updateBadges(){
   document.getElementById('nb-field').textContent=db.tasks.filter(t=>t.isField&&!t.done).length;
 }
 
-// ═══ FILTER ═══════════════════════════════════════
 function filterTasks(f,btn){
-  taskFilter=f;
-  document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
+  taskFilter=f;document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('active'));btn.classList.add('active');
   const labels={all:'All Tasks',pending:'Pending',done:'Completed',overdue:'Overdue',escalated:'Escalated',field:'Field Jobs',high:'High Priority'};
-  document.getElementById('tlist-title').textContent=labels[f]||'Tasks';
-  renderTaskList();
+  document.getElementById('tlist-title').textContent=labels[f]||'Tasks';renderTaskList();
 }
 
-// ═══ EXPORT MENU ═════════════════════════════════
 function toggleExportMenu(){const m=document.getElementById('export-menu');m.style.display=m.style.display==='none'?'block':'none';}
 function closeExportMenu(){const m=document.getElementById('export-menu');if(m)m.style.display='none';}
 document.addEventListener('click',e=>{if(!e.target.closest('#export-wrap'))closeExportMenu();});
 
-// ═══ NOTIFICATIONS + HOURLY REMINDER ═════════════
 let timers={};
 function isWithinIST(h1,h2){const now=new Date();const ist=new Date(now.getTime()+5.5*3600000);const h=ist.getUTCHours();return h>=h1&&h<h2;}
-
-function scheduleAll(){
-  Object.values(timers).forEach(t=>typeof t==='number'&&clearTimeout(t));
-  if(timers._hourly)clearInterval(timers._hourly);
-  timers={};
-  db.tasks.filter(t=>!t.done&&t.dueDate&&t.dueTime).forEach(scheduleTask);
-  startHourlyReminders();
-}
-
+function scheduleAll(){Object.values(timers).forEach(t=>typeof t==='number'&&clearTimeout(t));if(timers._hourly)clearInterval(timers._hourly);timers={};db.tasks.filter(t=>!t.done&&t.dueDate&&t.dueTime).forEach(scheduleTask);startHourlyReminders();}
 function scheduleTask(task){
   const target=new Date(task.dueDate+'T'+task.dueTime),diff=target-Date.now();
-  if(diff>0&&diff<86400000*2){
-    timers['due_'+task.id]=setTimeout(()=>fireNotif(task),diff);
-    const warn=diff-30*60*1000;if(warn>0)timers['warn_'+task.id]=setTimeout(()=>toast('⏰ "'+task.title+'" due in 30 min','warning'),warn);
-  }
+  if(diff>0&&diff<86400000*2){timers['due_'+task.id]=setTimeout(()=>fireNotif(task),diff);const warn=diff-30*60*1000;if(warn>0)timers['warn_'+task.id]=setTimeout(()=>toast('⏰ "'+task.title+'" due in 30 min','warning'),warn);}
   (task.escalation||[]).forEach((step,i)=>{const ed=diff+step.delayHours*3600*1000;if(ed>0&&!step.triggered)timers['esc_'+task.id+'_'+i]=setTimeout(()=>fireEscalation(task,step,i),Math.max(0,ed));});
 }
-
-function startHourlyReminders(){
-  if(timers._hourly)clearInterval(timers._hourly);
-  fireHourlyReminders();
-  timers._hourly=setInterval(fireHourlyReminders,3600000);
-}
-
+function startHourlyReminders(){if(timers._hourly)clearInterval(timers._hourly);fireHourlyReminders();timers._hourly=setInterval(fireHourlyReminders,3600000);}
 function fireHourlyReminders(){
   if(!isWithinIST(9,21))return;
   const overdue=db.tasks.filter(t=>!t.done&&isOverdue(t));
   const dueToday=db.tasks.filter(t=>{if(t.done)return false;const today=new Date().toISOString().split('T')[0];return t.dueDate===today&&!isOverdue(t);});
-  const all=[...overdue,...dueToday];
-  if(!all.length)return;
-  all.forEach(task=>{
-    const owner=getMember(task.ownerId);
-    const isOv=isOverdue(task);
-    const emoji=isOv?'🔴':'⏰';
-    const label=isOv?'OVERDUE':'Due Today';
-    const msg=emoji+' '+label+': "'+task.title+'" — '+owner.name+(task.isField&&task.fieldJob&&task.fieldJob.site?' | 📍 '+task.fieldJob.site:'');
-    if(Notification&&Notification.permission==='granted')new Notification(emoji+' Pushp CI Reminder',{body:msg,tag:'hr_'+task.id,renotify:true});
-    sendWebhook('hourly_reminder',task,{reminder_type:label,is_overdue:isOv});
-    log('🔔 Hourly: "'+task.title+'" → '+owner.name+' ['+label+']','warning');
-  });
+  const all=[...overdue,...dueToday];if(!all.length)return;
+  all.forEach(task=>{const owner=getMember(task.ownerId);const isOv=isOverdue(task);const emoji=isOv?'🔴':'⏰';const label=isOv?'OVERDUE':'Due Today';const msg=emoji+' '+label+': "'+task.title+'" — '+owner.name;if(Notification&&Notification.permission==='granted')new Notification(emoji+' Pushp CI Reminder',{body:msg,tag:'hr_'+task.id,renotify:true});sendWebhook('hourly_reminder',task,{reminder_type:label,is_overdue:isOv});});
   if(overdue.length>0)toast('🔴 '+overdue.length+' overdue task'+(overdue.length>1?'s':'')+' need attention!','error');
-  else if(dueToday.length>0)toast('⏰ '+dueToday.length+' task'+(dueToday.length>1?'s':'')+' due today — still pending','warning');
+  else if(dueToday.length>0)toast('⏰ '+dueToday.length+' task'+(dueToday.length>1?'s':'')+' due today','warning');
   saveDB();
 }
 
-// ═══ WEBHOOK SETTINGS ════════════════════════════
 function getWebhookCfg(){return JSON.parse(localStorage.getItem('tfp2_webhook')||'{"url":"","due":1,"esc":1,"hourly":1,"done":1}');}
 function saveWebhookCfg(cfg){localStorage.setItem('tfp2_webhook',JSON.stringify(cfg));}
-
 function openWebhookSettings(){
   if(!isAdmin()){toast('Admin only','error');return;}
   const cfg=getWebhookCfg();
   document.getElementById('wh-url').value=cfg.url||'';
-  document.getElementById('wh-due-enabled').value=cfg.due!==0?'1':'0';
-  document.getElementById('wh-esc-enabled').value=cfg.esc!==0?'1':'0';
-  document.getElementById('wh-hourly-enabled').value=cfg.hourly!==0?'1':'0';
-  document.getElementById('wh-done-enabled').value=cfg.done!==0?'1':'0';
+  document.getElementById('wh-due-enabled').value=cfg.due!==0?'1':'0';document.getElementById('wh-esc-enabled').value=cfg.esc!==0?'1':'0';
+  document.getElementById('wh-hourly-enabled').value=cfg.hourly!==0?'1':'0';document.getElementById('wh-done-enabled').value=cfg.done!==0?'1':'0';
   openModal('webhook-modal');
 }
-
 function saveWebhookSettings(){
   const url=document.getElementById('wh-url').value.trim();
-  const cfg={
-    url,
-    due:parseInt(document.getElementById('wh-due-enabled').value),
-    esc:parseInt(document.getElementById('wh-esc-enabled').value),
-    hourly:parseInt(document.getElementById('wh-hourly-enabled').value),
-    done:parseInt(document.getElementById('wh-done-enabled').value),
-  };
+  const cfg={url,due:parseInt(document.getElementById('wh-due-enabled').value),esc:parseInt(document.getElementById('wh-esc-enabled').value),hourly:parseInt(document.getElementById('wh-hourly-enabled').value),done:parseInt(document.getElementById('wh-done-enabled').value)};
   saveWebhookCfg(cfg);
   const dot=document.getElementById('webhook-status-dot');
-  if(url){dot.textContent='✅ Webhook active';dot.style.color='var(--green)';}
-  else{dot.textContent='Not configured';dot.style.color='var(--text3)';}
-  closeModal('webhook-modal');
-  toast('Webhook settings saved!'+(url?' Alerts will now fire automatically.':' No URL set.'),'success');
+  if(url){dot.textContent='✅ Webhook active';dot.style.color='var(--green)';}else{dot.textContent='Not configured';dot.style.color='var(--text3)';}
+  closeModal('webhook-modal');toast('Webhook settings saved!','success');
 }
-
 function buildPayload(event,task,extra){
-  const owner=getMember(task.ownerId);
-  const rep=task.repId?getMember(task.repId):null;
-  const fj=task.fieldJob||{};
-  const statusLabels={not_started:'Not Started',wip:'In Progress',pending:'Pending',onhold:'On Hold',done:'Completed',cancelled:'Cancelled'};
-  return {
-    event,
-    company:'Pushp Construction & Interior',
-    task_id:task.id,
-    task_title:task.title,
-    task_description:task.desc||'',
-    priority:task.priority,
-    status:statusLabels[task.status||'pending']||task.status||'Pending',
-    category:task.category||'',
-    due_date:task.dueDate||'',
-    due_time:task.dueTime||'',
-    owner_name:owner.name||'',
-    owner_phone:owner.phone||'',
-    owner_email:owner.email||'',
-    owner_role:owner.role||'',
-    rep_name:rep?rep.name:'',
-    rep_phone:rep?rep.phone:'',
-    is_field_job:!!task.isField,
-    site:fj.site||'',
-    site_address:fj.address||'',
-    customer:fj.customer||'',
-    customer_phone:fj.cphone||'',
-    customer_manager:fj.cmanager||'',
-    customer_manager_phone:fj.cmanagerphone||'',
-    visit_date:fj.visitDate||'',
-    visit_time:fj.visitTime||'',
-    site_notes:fj.siteNotes||'',
-    message: buildMessage(event,task,extra),
-    timestamp: new Date().toISOString(),
-    ...extra
-  };
+  const owner=getMember(task.ownerId);const rep=task.repId?getMember(task.repId):null;const fj=task.fieldJob||{};
+  return{event,company:'Pushp Construction & Interior',task_id:task.id,task_title:task.title,task_description:task.desc||'',priority:task.priority,status:task.status||'pending',due_date:task.dueDate||'',due_time:task.dueTime||'',owner_name:owner.name||'',owner_phone:owner.phone||'',owner_email:owner.email||'',rep_name:rep?rep.name:'',is_field_job:!!task.isField,site:fj.site||'',customer:fj.customer||'',customer_manager:fj.cmanager||'',message:buildMessage(event,task,extra),timestamp:new Date().toISOString(),...extra};
 }
-
 function buildMessage(event,task,extra){
-  const owner=getMember(task.ownerId);
-  const fj=task.fieldJob||{};
-  const siteInfo=task.isField&&fj.site?' | 📍 '+fj.site+(fj.customer?' — '+fj.customer:''):'';
-  if(event==='task_due')    return '⏰ Task Due Now: "'+task.title+'" — '+owner.name+siteInfo;
-  if(event==='task_overdue')return '🔴 OVERDUE: "'+task.title+'" — '+owner.name+' (Due: '+task.dueDate+')'+siteInfo;
-  if(event==='task_done')   return '✅ Completed: "'+task.title+'" by '+owner.name;
-  if(event==='escalation')  return '🔺 ESCALATION Level '+(extra.escalation_level||1)+': "'+task.title+'" is overdue — assigned to '+owner.name+'. Escalating to '+(extra.escalation_manager_name||'')+siteInfo;
-  if(event==='hourly_reminder') return '🔔 Reminder ['+(extra.reminder_type||'pending')+']: "'+task.title+'" — '+owner.name+siteInfo;
-  return '"'+task.title+'" — '+owner.name;
+  const owner=getMember(task.ownerId);const fj=task.fieldJob||{};const siteInfo=task.isField&&fj.site?' | 📍 '+fj.site+(fj.customer?' — '+fj.customer:''):'';
+  if(event==='task_due')return'⏰ Task Due Now: "'+task.title+'" — '+owner.name+siteInfo;
+  if(event==='task_overdue')return'🔴 OVERDUE: "'+task.title+'" — '+owner.name+siteInfo;
+  if(event==='task_done')return'✅ Completed: "'+task.title+'" by '+owner.name;
+  if(event==='escalation')return'🔺 ESCALATION: "'+task.title+'" overdue — '+owner.name+siteInfo;
+  if(event==='hourly_reminder')return'🔔 Reminder: "'+task.title+'" — '+owner.name+siteInfo;
+  return'"'+task.title+'" — '+owner.name;
 }
-
 async function sendWebhook(event,task,extra,cfgOverride){
-  const cfg=cfgOverride||getWebhookCfg();
-  if(!cfg.url)return;
-  // check per-event toggle
+  const cfg=cfgOverride||getWebhookCfg();if(!cfg.url)return;
   const toggleMap={task_due:'due',task_overdue:'due',escalation:'esc',hourly_reminder:'hourly',task_done:'done'};
-  const toggle=toggleMap[event];
-  if(toggle&&cfg[toggle]===0)return;
-  const payload=buildPayload(event,task,extra||{});
-  try{
-    await fetch(cfg.url,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload),
-      mode:'no-cors' // Make.com/Zapier support no-cors
-    });
-    log('📡 Webhook fired ['+event+']: '+task.title,'info');
-  }catch(e){
-    log('⚠ Webhook error ['+event+']: '+e.message,'warning');
-  }
+  const toggle=toggleMap[event];if(toggle&&cfg[toggle]===0)return;
+  try{await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(buildPayload(event,task,extra||{})),mode:'no-cors'});}catch(e){}
 }
-
 async function testWebhook(){
-  const url=document.getElementById('wh-url').value.trim();
-  if(!url){toast('Please enter a webhook URL first','error');return;}
-  const testPayload={
-    event:'test_ping',
-    company:'Pushp Construction & Interior',
-    message:'🧪 Test ping from Pushp CI Task Manager — webhook is working!',
-    timestamp:new Date().toISOString(),
-    test:true
-  };
-  try{
-    await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(testPayload),mode:'no-cors'});
-    toast('✅ Test ping sent! Check your Make/Zapier scenario.','success');
-  }catch(e){
-    toast('⚠ Could not reach webhook URL. Check the URL and try again.','error');
-  }
+  const url=document.getElementById('wh-url').value.trim();if(!url){toast('Please enter a webhook URL first','error');return;}
+  try{await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:'test_ping',company:'Pushp Construction & Interior',message:'🧪 Test ping!',timestamp:new Date().toISOString(),test:true}),mode:'no-cors'});toast('✅ Test ping sent!','success');}catch(e){toast('⚠ Could not reach webhook URL','error');}
 }
-
 function fireNotif(task){
-  if(task.done)return;
-  const owner=getMember(task.ownerId);
-  const isOv=isOverdue(task);
-  const event=isOv?'task_overdue':'task_due';
-  // Browser notification
-  const msg=buildMessage(event,task,{});
-  if(Notification&&Notification.permission==='granted')new Notification('Pushp CI — '+(isOv?'OVERDUE':'Task Due'),{body:msg});
-  else toast('🔔 '+(isOv?'Overdue':'Due')+': '+task.title,'warning');
-  // Webhook → triggers WhatsApp/SMS/Email/Call via Make.com
+  if(task.done)return;const isOv=isOverdue(task);const event=isOv?'task_overdue':'task_due';const msg=buildMessage(event,task,{});
+  if(Notification&&Notification.permission==='granted')new Notification('Pushp CI',{body:msg});else toast('🔔 '+(isOv?'Overdue':'Due')+': '+task.title,'warning');
   sendWebhook(event,task,{});
-  log('🔔 Reminder fired for "'+task.title+'" → '+owner.name+(getWebhookCfg().url?' + webhook':''));
 }
-
 function fireEscalation(task,step,idx){
   const ft=db.tasks.find(t=>t.id===task.id);if(!ft||ft.done)return;
   ft.escalated=true;if(ft.escalation[idx])ft.escalation[idx].triggered=true;
-  const mgr=getMember(step.managerId),owner=getMember(ft.ownerId);
-  const extra={
-    escalation_level:step.level,
-    escalation_manager_name:mgr.name,
-    escalation_manager_phone:mgr.phone||'',
-    escalation_manager_email:mgr.email||'',
-    escalation_message:step.message||'',
-    escalation_channels:(step.notifs||[]).join(','),
-    delay_hours:step.delayHours
-  };
-  const msg=buildMessage('escalation',ft,extra);
+  const mgr=getMember(step.managerId);
+  const extra={escalation_level:step.level,escalation_manager_name:mgr.name,escalation_manager_phone:mgr.phone||'',delay_hours:step.delayHours};
   toast('🔺 Escalation Level '+step.level+': Notifying '+mgr.name,'error');
-  if(Notification&&Notification.permission==='granted')new Notification('Pushp CI — ESCALATION',{body:msg});
-  // Webhook → Make.com sends WhatsApp/SMS/Call to manager
-  sendWebhook('escalation',ft,extra);
-  log('🔺 ESC Level '+step.level+' — '+mgr.name+' notified for "'+ft.title+'"'+(getWebhookCfg().url?' + webhook':''),'error');
-  saveDB();renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
+  if(Notification&&Notification.permission==='granted')new Notification('Pushp CI — ESCALATION',{body:buildMessage('escalation',ft,extra)});
+  sendWebhook('escalation',ft,extra);saveDB();renderDashboard();renderTaskList();renderFieldJobs();renderEscalation();updateBadges();
 }
 
-// ═══ EXCEL EXPORT ════════════════════════════════
 function exportExcel(){
-  const rows=[['Task','Owner','Rep','Priority','Category','Due Date','Due Time','Status','Field Job','Site','Address','Customer','Cust.Phone','Cust.Manager','Mgr.Phone','Visit Date','Visit Time','Site Notes','Escalated','Esc.Levels','Notifications','Description','Created']];
-  db.tasks.forEach(t=>{
-    const owner=getMember(t.ownerId),rep=t.repId?getMember(t.repId):null,fj=t.fieldJob||{};
-    const status=t.done?'Completed':isOverdue(t)?'Overdue':'Pending';
-    rows.push([t.title,owner.name,rep?rep.name:'',t.priority,t.category||'',t.dueDate||'',t.dueTime||'',status,t.isField?'Yes':'No',fj.site||'',fj.address||'',fj.customer||'',fj.cphone||'',fj.cmanager||'',fj.cmanagerphone||'',fj.visitDate||'',fj.visitTime||'',fj.siteNotes||'',t.escalated?'Yes':'No',(t.escalation||[]).length,(t.notifs||[]).join(', '),t.desc||'',t.createdAt?new Date(t.createdAt).toLocaleString('en-IN'):'']);
-  });
-  rows.push([],[' --- TEAM SUMMARY ---'],['Member','Role','Type','Phone','Email','Total','Done','Pending','Field','Overdue','Escalated','%']);
-  db.members.forEach(m=>{
-    const mt=db.tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mo=mt.filter(t=>isOverdue(t)).length,me=mt.filter(t=>t.escalated).length,mf=mt.filter(t=>t.isField).length,mp=mt.length?Math.round(md/mt.length*100):0;
-    rows.push([m.name,m.role||'',m.type||'',m.phone||'',m.email||'',mt.length,md,mt.length-md,mf,mo,me,mp+'%']);
-  });
-  rows.push([],[' --- FIELD JOBS ---'],['Customer','Site','Address','Tasks','Done','Our Rep','Cust.Manager']);
-  const byCust={};db.tasks.filter(t=>t.isField).forEach(t=>{const c=(t.fieldJob&&t.fieldJob.customer)||'Unknown';if(!byCust[c])byCust[c]=[];byCust[c].push(t);});
-  Object.entries(byCust).forEach(([c,tasks])=>{
-    const done=tasks.filter(t=>t.done).length,fj=tasks[0].fieldJob||{},rep=tasks[0].repId?getMember(tasks[0].repId):null;
-    rows.push([c,fj.site||'',fj.address||'',tasks.length,done,rep?rep.name:'',fj.cmanager||'']);
-  });
+  const rows=[['Task','Owner','Priority','Due Date','Status','Field Job','Customer','Site']];
+  db.tasks.forEach(t=>{const owner=getMember(t.ownerId);const fj=t.fieldJob||{};const status=t.done?'Completed':isOverdue(t)?'Overdue':'Pending';rows.push([t.title,owner.name,t.priority,t.dueDate||'',status,t.isField?'Yes':'No',fj.customer||'',fj.site||'']);});
   const csv=rows.map(r=>r.map(v=>{const s=String(v==null?'':v).replace(/"/g,'""');return/[,"\n]/.test(s)?'"'+s+'"':s;}).join(',')).join('\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='PushpCI_Tasks_'+new Date().toISOString().split('T')[0]+'.csv';a.click();URL.revokeObjectURL(url);
-  toast('Excel/CSV exported!','success');log('📊 Excel exported');
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='PushpCI_Tasks_'+new Date().toISOString().split('T')[0]+'.csv';a.click();URL.revokeObjectURL(url);
+  toast('Excel/CSV exported!','success');
 }
-
-// ═══ PDF FULL REPORT ═════════════════════════════
 function exportPDF(){
-  const total=db.tasks.length,done=db.tasks.filter(t=>t.done).length,over=db.tasks.filter(t=>isOverdue(t)).length,field=db.tasks.filter(t=>t.isField).length,pct=total?Math.round(done/total*100):0;
   const nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'long',timeStyle:'short'});
-  const sc=t=>t.done?'#2ecc8a':isOverdue(t)?'#f05252':t.escalated?'#f06292':'#4da6ff';
-  const st=t=>t.done?'Completed':isOverdue(t)?'Overdue':t.escalated?'Escalated':'Pending';
-  const pc={high:'#f05252',medium:'#f5a623',low:'#2ecc8a'};
-  const taskRows=db.tasks.map(t=>{
-    const owner=getMember(t.ownerId),rep=t.repId?getMember(t.repId):null,fj=t.fieldJob||{};
-    return'<tr><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px">'+t.title+(t.isField?'<br><span style="color:#26c6da;font-size:10px">📍 Field</span>':'')+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px">'+owner.name+(rep?'<br><span style="font-size:10px;color:#888">Rep: '+rep.name+'</span>':'')+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px"><span style="color:'+pc[t.priority]+';font-weight:600">'+t.priority+'</span></td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px">'+(t.dueDate||'—')+(t.dueTime?' '+fmtT(t.dueTime):'')+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px"><span style="color:'+sc(t)+';font-weight:600">'+st(t)+'</span></td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:11px;color:#555">'+(fj.customer||'—')+(fj.site?'<br>'+fj.site:'')+'</td></tr>';
-  }).join('');
-  const mRows=db.members.map(m=>{
-    const mt=db.tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mo=mt.filter(t=>isOverdue(t)).length,mf=mt.filter(t=>t.isField).length,mp=mt.length?Math.round(md/mt.length*100):0;
-    return'<tr><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;font-weight:600">'+m.name+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;color:#555">'+(m.role||'—')+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;text-align:center">'+mt.length+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;text-align:center;color:#2ecc8a;font-weight:600">'+md+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;text-align:center;color:'+(mo>0?'#f05252':'#999')+'">'+mo+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;text-align:center;color:#26c6da">'+mf+'</td><td style="padding:8px 10px;border-bottom:1px solid #eee;font-size:12px;text-align:center"><div style="background:#f0f0f0;border-radius:10px;height:8px;width:80px;display:inline-block;vertical-align:middle;margin-right:6px;overflow:hidden"><div style="height:100%;width:'+mp+'%;background:'+(mp>=80?'#2ecc8a':mp>=50?'#f5a623':'#f05252')+';border-radius:10px"></div></div><strong style="color:'+(mp>=80?'#2ecc8a':mp>=50?'#f5a623':'#f05252')+'">'+mp+'%</strong></td></tr>';
-  }).join('');
-  const html='<!DOCTYPE html><html><head><meta charset="UTF-8"/><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Segoe UI,Arial,sans-serif;color:#1a1a2e;background:#fff;padding:32px;font-size:13px;}.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px;padding-bottom:20px;border-bottom:3px solid #2e7d32;border-top:3px solid #c62828;}.logo{font-size:20px;font-weight:700;}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px;}.kpi{background:#f1f8f1;border:1px solid #c8e6c9;border-radius:10px;padding:14px;text-align:center;}.kpi .val{font-size:26px;font-weight:700;line-height:1;margin-bottom:4px;}.kpi .lbl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.06em;}.section{margin-bottom:28px;}.section h2{font-size:14px;font-weight:700;color:#2e7d32;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid #c8e6c9;}table{width:100%;border-collapse:collapse;}th{background:#f1f8f1;padding:9px 10px;text-align:left;font-size:11px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #c8e6c9;}tr:last-child td{border-bottom:none;}.footer{margin-top:32px;padding-top:16px;border-top:1px solid #eee;font-size:11px;color:#aaa;text-align:center;}@media print{@page{margin:12mm;}body{padding:0;}}</style></head><body>'
-    +'<div class="header"><div><div class="logo"><span style="color:#2e7d32">PUSHP</span> <span style="color:#c62828">Construction &amp; Interior</span></div><div style="font-size:11px;color:#555;margin-top:4px">B-26, Eastern Business District, L.B.S. Marg, Near Metro,<br>Ganesh Nagar, Bhandup (W), Mumbai 400 078.</div><div style="font-size:11px;color:#777;margin-top:3px">Ph: 02244821401 &nbsp;|&nbsp; 9833585445 &nbsp;|&nbsp; 9619611116 &nbsp;|&nbsp; pushp.ci@gmail.com &nbsp;|&nbsp; GSTN: 27ARCPB6945J2ZN</div></div><div style="text-align:right;color:#666;font-size:12px"><div><strong>Generated:</strong> '+nowStr+'</div><div style="margin-top:4px">Task Management Report</div></div></div>'
-    +'<div class="kpis"><div class="kpi"><div class="val" style="color:#7c6af7">'+total+'</div><div class="lbl">Total</div></div><div class="kpi"><div class="val" style="color:#2ecc8a">'+done+'</div><div class="lbl">Done</div></div><div class="kpi"><div class="val" style="color:#f5a623">'+(total-done)+'</div><div class="lbl">Pending</div></div><div class="kpi"><div class="val" style="color:#f05252">'+over+'</div><div class="lbl">Overdue</div></div><div class="kpi"><div class="val" style="color:#26c6da">'+field+'</div><div class="lbl">Field Jobs</div></div></div>'
-    +'<div style="background:#f8f7ff;border:1px solid #e8e6ff;border-radius:10px;padding:14px;margin-bottom:28px;display:flex;align-items:center;gap:16px"><div style="font-size:12px;color:#555">Overall Completion</div><div style="flex:1;background:#e8e6ff;border-radius:10px;height:12px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#2e7d32,#c62828);border-radius:10px"></div></div><div style="font-size:18px;font-weight:700;color:'+(pct>=80?'#2ecc8a':pct>=50?'#f5a623':'#f05252')+';min-width:50px;text-align:right">'+pct+'%</div></div>'
-    +'<div class="section"><h2>All Tasks</h2><table><thead><tr><th>Task</th><th>Owner</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Customer/Site</th></tr></thead><tbody>'+taskRows+'</tbody></table></div>'
-    +'<div class="section" style="page-break-before:always"><h2>Team Performance</h2><table><thead><tr><th>Member</th><th>Role</th><th>Total</th><th>Done</th><th>Overdue</th><th>Field</th><th>Completion</th></tr></thead><tbody>'+mRows+'</tbody></table></div>'
-    +'<div class="footer" style="border-top:2px solid #c62828">Pushp Construction &amp; Interior · GSTN: 27ARCPB6945J2ZN · B-26, EBD, L.B.S. Marg, Bhandup (W), Mumbai 400078 · '+nowStr+'</div></body></html>';
-  const w=window.open('','_blank');w.document.write(html);w.document.close();
-  setTimeout(()=>w.print(),600);
-  toast('PDF report ready — use Print → Save as PDF','success');log('📄 PDF report generated');
+  const total=db.tasks.length,done=db.tasks.filter(t=>t.done).length,over=db.tasks.filter(t=>isOverdue(t)).length,pct=total?Math.round(done/total*100):0;
+  const taskRows=db.tasks.map(t=>{const owner=getMember(t.ownerId);const fj=t.fieldJob||{};const status=t.done?'Completed':isOverdue(t)?'Overdue':'Pending';return`<tr><td>${t.title}</td><td>${owner.name}</td><td>${t.priority}</td><td>${t.dueDate||'—'}</td><td>${status}</td><td>${fj.customer||'—'}</td></tr>`;}).join('');
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><style>body{font-family:Arial,sans-serif;padding:24px;}table{width:100%;border-collapse:collapse;}th,td{padding:8px;border:1px solid #ddd;font-size:12px;}th{background:#f1f8f1;}</style></head><body><h2>Pushp Construction & Interior — Task Report</h2><p>Generated: ${nowStr} | Total: ${total} | Done: ${done} | Overdue: ${over} | Rate: ${pct}%</p><table><thead><tr><th>Task</th><th>Owner</th><th>Priority</th><th>Due Date</th><th>Status</th><th>Customer</th></tr></thead><tbody>${taskRows}</tbody></table></body></html>`;
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),600);toast('PDF ready — Print → Save as PDF','success');
 }
+function exportDashboardPDF(){exportPDF();}
 
-// ═══ SUMMARY DASHBOARD PDF ═══════════════════════
-function exportDashboardPDF(){
-  const total=db.tasks.length,done=db.tasks.filter(t=>t.done).length,over=db.tasks.filter(t=>isOverdue(t)).length,esc=db.tasks.filter(t=>t.escalated).length,field=db.tasks.filter(t=>t.isField).length,pct=total?Math.round(done/total*100):0;
-  const nowStr=new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'long',timeStyle:'short'});
-  const ph=db.tasks.filter(t=>t.priority==='high'),phd=ph.filter(t=>t.done).length;
-  const pm=db.tasks.filter(t=>t.priority==='medium'),pmd=pm.filter(t=>t.done).length;
-  const pl=db.tasks.filter(t=>t.priority==='low'),pld=pl.filter(t=>t.done).length;
-  const overdueList=db.tasks.filter(t=>!t.done&&isOverdue(t)).slice(0,8).map(t=>{
-    const owner=getMember(t.ownerId),daysOver=t.dueDate?Math.max(0,Math.ceil((Date.now()-new Date(t.dueDate+'T23:59'))/86400000)):0;
-    return'<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #fde"><div style="width:6px;height:6px;border-radius:50%;background:#f05252;flex-shrink:0"></div><div style="flex:1;font-size:12px;font-weight:500">'+t.title+'</div><div style="font-size:11px;color:#888">'+owner.name+'</div><div style="font-size:11px;color:#f05252;font-weight:600;white-space:nowrap">'+(daysOver>0?daysOver+'d late':'Today')+'</div></div>';
-  }).join('');
-  const memberBars=db.members.map(m=>{
-    const mt=db.tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mp=mt.length?Math.round(md/mt.length*100):0,mf=mt.filter(t=>t.isField).length;
-    const bc=mp>=80?'#2ecc8a':mp>=50?'#f5a623':'#f05252';
-    return'<div style="margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><div style="display:flex;align-items:center;gap:8px"><div style="width:24px;height:24px;border-radius:50%;background:'+m.color+';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff">'+initials(m.name)+'</div><div><div style="font-size:12px;font-weight:600">'+m.name+'</div><div style="font-size:10px;color:#888">'+(m.role||'')+(mf?' · 📍 '+mf+' field':'')+'</div></div></div><div style="text-align:right"><div style="font-size:14px;font-weight:700;color:'+bc+'">'+mp+'%</div><div style="font-size:10px;color:#aaa">'+md+'/'+mt.length+'</div></div></div><div style="background:#f0f0f0;border-radius:6px;height:8px;overflow:hidden"><div style="height:100%;width:'+mp+'%;background:'+bc+';border-radius:6px"></div></div></div>';
-  }).join('');
-  const cats=[...new Set(db.tasks.map(t=>t.category||'Other'))];
-  const catRows=cats.map(c=>{
-    const ct=db.tasks.filter(t=>(t.category||'Other')===c),cd=ct.filter(t=>t.done).length,cp=ct.length?Math.round(cd/ct.length*100):0;
-    return'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="width:90px;font-size:12px;color:#555;flex-shrink:0">'+c+'</div><div style="flex:1;background:#f0f0f0;border-radius:6px;height:8px;overflow:hidden"><div style="height:100%;width:'+cp+'%;background:#7c6af7;border-radius:6px"></div></div><div style="width:35px;text-align:right;font-size:12px;font-weight:600;color:#7c6af7">'+cp+'%</div></div>';
-  }).join('');
-  const html='<!DOCTYPE html><html><head><meta charset="UTF-8"/><style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:Segoe UI,Arial,sans-serif;color:#1a1a2e;background:#fff;padding:24px;font-size:13px;}.hdr{background:linear-gradient(135deg,#1a1a2e,#2d2b55);color:#fff;padding:20px 24px;border-radius:12px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}.kgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px;}.kcard{border-radius:10px;padding:14px 12px;text-align:center;}.kval{font-size:28px;font-weight:700;line-height:1;margin-bottom:3px;}.klbl{font-size:10px;opacity:.7;text-transform:uppercase;letter-spacing:.06em;}.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}.card{background:#f8f8ff;border:1px solid #e8e8f5;border-radius:10px;padding:16px;}.ctitle{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c6af7;margin-bottom:14px;}.footer{text-align:center;font-size:10px;color:#bbb;margin-top:20px;padding-top:12px;border-top:1px solid #eee;}@media print{@page{margin:10mm;}body{padding:0;}}</style></head><body>'
-    +'<div class="hdr"><div><div style="font-size:20px;font-weight:700">Pushp Construction &amp; Interior</div><div style="font-size:13px;opacity:.85;margin-top:2px">Task &amp; Operations Summary</div><div style="font-size:11px;opacity:.6;margin-top:3px">'+nowStr+'</div></div><div style="text-align:right"><div style="font-size:36px;font-weight:700">'+pct+'%</div><div style="font-size:11px;opacity:.6">Completion Rate</div></div></div>'
-    +'<div class="kgrid"><div class="kcard" style="background:#f1f8f1;color:#2e7d32"><div class="kval">'+total+'</div><div class="klbl">Total</div></div><div class="kcard" style="background:#e8fdf4;color:#2ecc8a"><div class="kval">'+done+'</div><div class="klbl">Done</div></div><div class="kcard" style="background:#fff8e8;color:#f5a623"><div class="kval">'+(total-done)+'</div><div class="klbl">Pending</div></div><div class="kcard" style="background:#fef0f0;color:#f05252"><div class="kval">'+over+'</div><div class="klbl">Overdue</div></div><div class="kcard" style="background:#e8fbfd;color:#26c6da"><div class="kval">'+field+'</div><div class="klbl">Field</div></div></div>'
-    +'<div style="background:#f8f8ff;border:1px solid #e8e8f5;border-radius:10px;padding:14px;margin-bottom:16px"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c6af7;margin-bottom:10px">Completion by Priority</div><div style="background:#e8e8f0;border-radius:20px;height:16px;overflow:hidden;margin-bottom:10px"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#2e7d32,#c62828);border-radius:20px"></div></div><div style="display:flex;gap:20px;font-size:11px;color:#888"><span>🔴 High: '+phd+'/'+ph.length+' ('+( ph.length?Math.round(phd/ph.length*100):0)+'%)</span><span>🟡 Medium: '+pmd+'/'+pm.length+' ('+(pm.length?Math.round(pmd/pm.length*100):0)+'%)</span><span>🟢 Low: '+pld+'/'+pl.length+' ('+(pl.length?Math.round(pld/pl.length*100):0)+'%)</span></div></div>'
-    +'<div class="g2"><div class="card"><div class="ctitle">Team Performance</div>'+(memberBars||'<div style="color:#aaa;font-size:12px">No members</div>')+'</div><div><div class="card" style="margin-bottom:14px"><div class="ctitle">By Category</div>'+(catRows||'<div style="color:#aaa;font-size:12px">No tasks</div>')+'</div><div class="card" style="background:#fff5f5;border-color:#fdd"><div class="ctitle" style="color:#f05252">⚠ Overdue ('+over+')</div>'+(overdueList||'<div style="color:#2ecc8a;font-size:12px">✅ No overdue tasks!</div>')+'</div></div></div>'
-    +'<div class="footer" style="border-top:2px solid #c62828">Pushp Construction &amp; Interior &nbsp;|&nbsp; GSTN: 27ARCPB6945J2ZN &nbsp;|&nbsp; B-26, EBD, L.B.S. Marg, Bhandup (W), Mumbai 400 078 &nbsp;|&nbsp; Ph: 02244821401, 9833585445 &nbsp;|&nbsp; pushp.ci@gmail.com</div></body></html>';
-  const w=window.open('','_blank');w.document.write(html);w.document.close();
-  setTimeout(()=>w.print(),600);
-  toast('Summary dashboard ready — Print → Save as PDF','success');log('📋 Summary dashboard PDF generated');
-}
-
-
-// ═══ BULK UPLOAD ════════════════════════════════
-let bulkParsedRows = [];
-let bulkCurrentStep = 1;
-
+let bulkParsedRows=[],bulkCurrentStep=1;
 function openBulkUpload(){
   if(!isAdmin()){toast('Only admin can bulk import tasks','error');return;}
   bulkParsedRows=[];bulkCurrentStep=1;
-  document.getElementById('bulk-step1').style.display='';
-  document.getElementById('bulk-step2').style.display='none';
-  document.getElementById('bulk-step3').style.display='none';
-  document.getElementById('bulk-action-btn').style.display='none';
-  document.getElementById('bulk-action-btn').textContent='Preview →';
-  document.getElementById('bulk-file-input').value='';
-  setBulkStep(1);
-  openModal('bulk-modal');
+  document.getElementById('bulk-step1').style.display='';document.getElementById('bulk-step2').style.display='none';document.getElementById('bulk-step3').style.display='none';
+  document.getElementById('bulk-action-btn').style.display='none';document.getElementById('bulk-action-btn').textContent='Preview →';document.getElementById('bulk-file-input').value='';
+  setBulkStep(1);openModal('bulk-modal');
 }
-
 function setBulkStep(n){
-  bulkCurrentStep=n;
-  [1,2,3].forEach(i=>{
-    const el=document.getElementById('bstep-'+i);
-    if(i===n){el.style.color='var(--accent)';el.style.background='var(--accent-glow)';el.style.fontWeight='600';}
-    else if(i<n){el.style.color='var(--green)';el.style.background='var(--green-bg)';el.style.fontWeight='500';}
-    else{el.style.color='var(--text3)';el.style.background='transparent';el.style.fontWeight='400';}
-  });
+  bulkCurrentStep=n;[1,2,3].forEach(i=>{const el=document.getElementById('bstep-'+i);if(i===n){el.style.color='var(--accent)';el.style.background='var(--accent-glow)';el.style.fontWeight='600';}else if(i<n){el.style.color='var(--green)';el.style.background='var(--green-bg)';}else{el.style.color='var(--text3)';el.style.background='transparent';}});
 }
-
 function downloadTemplate(){
-  const headers=['Task Title','Description','Owner Name','Our Representative','Priority','Task Status','Category','Due Date','Due Time','Repeat','Is Field Job','Site Name','Site Address','Customer Name','Customer Phone','Customer Manager','Customer Manager Phone','Visit Date','Visit Time','Site Notes'];
-  const sample1=['Fix water pipe at ABC site','Check main supply','Ravi Kumar','Arjun Mehta','high','wip','Field Service','2025-04-15','10:00','none','yes','ABC Factory','Plot 12 MIDC','ABC Industries','+912212345678','Suresh Patil','+912298765432','2025-04-15','09:30','Carry tools'];
-  const sample2=['Submit Q1 report','Complete by EOD','Arjun Mehta','','medium','not_started','Finance','2025-04-20','17:00','none','no','','','','','','','','',''];
-  const sample3=['Team meeting prep','Prepare slides','Priya Singh','','low','pending','Work','2025-04-18','09:00','weekly','no','','','','','','','','',''];
-  const rows=[headers,sample1,sample2,sample3];
-  const csv=rows.map(r=>r.map(v=>{const s=String(v==null?'':v).replace(/"/g,'""');return/[,"\r\n]/.test(s)?'"'+s+'"':s;}).join(',')).join('\r\n');
+  const headers=['Task Title','Description','Owner Name','Priority','Due Date','Due Time','Category','Is Field Job','Site Name','Customer Name'];
+  const rows=[headers,['Fix pipe at site','Check supply','Ravi Kumar','high','2025-04-15','10:00','Field Service','yes','ABC Factory','ABC Industries'],['Submit report','EOD','Arjun Mehta','medium','2025-04-20','17:00','Finance','no','','']];
+  const csv=rows.map(r=>r.join(',')).join('\r\n');
   const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob),a=document.createElement('a');
-  a.href=url;a.download='PushpCI_Bulk_Upload_Template.csv';a.click();URL.revokeObjectURL(url);
-  toast('Template downloaded!','success');
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='PushpCI_Bulk_Upload_Template.csv';a.click();URL.revokeObjectURL(url);toast('Template downloaded!','success');
 }
-function handleFileDrop(e){
-  e.preventDefault();
-  document.getElementById('drop-zone').style.borderColor='var(--border2)';
-  const file=e.dataTransfer.files[0];
-  if(file)processCSVFile(file);
-}
-function handleFileSelect(e){
-  const file=e.target.files[0];
-  if(file)processCSVFile(file);
-}
-
+function handleFileDrop(e){e.preventDefault();document.getElementById('drop-zone').style.borderColor='var(--border2)';const file=e.dataTransfer.files[0];if(file)processCSVFile(file);}
+function handleFileSelect(e){const file=e.target.files[0];if(file)processCSVFile(file);}
 function processCSVFile(file){
   if(!file.name.toLowerCase().endsWith('.csv')){toast('Please upload a .csv file','error');return;}
-  const reader=new FileReader();
-  reader.onload=function(e){
-    const text=e.target.result;
-    parseAndPreviewCSV(text,file.name);
-  };
-  reader.readAsText(file,'UTF-8');
+  const reader=new FileReader();reader.onload=function(e){parseAndPreviewCSV(e.target.result,file.name);};reader.readAsText(file,'UTF-8');
 }
-
 function parseCSVLine(line){
   const result=[];let cur='';let inQ=false;
-  for(let i=0;i<line.length;i++){
-    const ch=line[i];
-    if(ch==='"'){
-      if(inQ&&line[i+1]==='"'){cur+='"';i++;}
-      else inQ=!inQ;
-    } else if(ch===','&&!inQ){result.push(cur.trim());cur='';}
-    else cur+=ch;
-  }
-  result.push(cur.trim());
-  return result;
+  for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){result.push(cur.trim());cur='';}else cur+=ch;}
+  result.push(cur.trim());return result;
 }
-
 function parseAndPreviewCSV(text,filename){
   const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(l=>l.trim());
   if(lines.length<2){toast('File is empty or has only headers','error');return;}
   const headers=parseCSVLine(lines[0]).map(h=>h.replace(/^\uFEFF/,'').trim().toLowerCase());
   const rows=[];
-  for(let i=1;i<lines.length;i++){
-    if(!lines[i].trim())continue;
-    const vals=parseCSVLine(lines[i]);
-    const row={};
-    headers.forEach((h,j)=>row[h]=vals[j]||'');
-    rows.push(row);
-  }
+  for(let i=1;i<lines.length;i++){if(!lines[i].trim())continue;const vals=parseCSVLine(lines[i]);const row={};headers.forEach((h,j)=>row[h]=vals[j]||'');rows.push(row);}
   bulkParsedRows=rows;
-
-  // Build preview table
-  const previewCols=['task title','owner name','priority','task status','due date','category','is field job','customer name'];
-  const visibleCols=previewCols.filter(col=>headers.includes(col));
-  const warnings=[];
-  const tableHeaders=visibleCols.map(h=>`<th style="padding:8px 10px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;text-transform:capitalize">${h}</th>`).join('');
-  document.getElementById('bulk-preview-head').innerHTML=`<tr>${tableHeaders}<th style="padding:8px 10px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)">Status</th></tr>`;
-
-  const bodyRows=rows.map((row,i)=>{
-    const title=row['task title']||row['title']||'';
-    const owner=row['owner name']||row['owner']||'';
-    const dueDate=row['due date']||row['duedate']||'';
-    let rowStatus='<span style="color:var(--green);font-size:11px">✅ Ready</span>';
-    if(!title){warnings.push(`Row ${i+2}: Missing task title`);rowStatus='<span style="color:var(--red);font-size:11px">❌ No title</span>';}
-    else if(!owner){rowStatus='<span style="color:var(--amber);font-size:11px">⚠ No owner (will be unassigned)</span>';}
-    const cells=visibleCols.map(col=>{
-      const v=row[col]||'';
-      let style='padding:8px 10px;font-size:12px;border-bottom:1px solid var(--border);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
-      if(col==='priority'&&v){const pc={high:'var(--red)',medium:'var(--amber)',low:'var(--green)'};return`<td style="${style};color:${pc[v.toLowerCase()]||'var(--text2)'};font-weight:600">${v}</td>`;}
-      if(col==='task status'&&v){const sc={wip:'#7c4dff',done:'var(--green)',cancelled:'#666',onhold:'var(--amber)',not_started:'var(--blue)',pending:'var(--blue)'};return`<td style="${style};color:${sc[v.toLowerCase().replace(/ /g,'_')]||'var(--text2)'}">${v}</td>`;}
-      return`<td style="${style};color:var(--text2)">${v||'—'}</td>`;
-    }).join('');
-    return`<tr>${cells}<td style="padding:8px 10px;border-bottom:1px solid var(--border)">${rowStatus}</td></tr>`;
-  }).join('');
-
-  document.getElementById('bulk-preview-body').innerHTML=bodyRows;
   const validRows=rows.filter(r=>(r['task title']||r['title']||'').trim()).length;
-  document.getElementById('bulk-preview-info').innerHTML=`<span style="color:var(--green);font-weight:600">📂 ${filename}</span> — <strong>${rows.length}</strong> rows found, <strong style="color:var(--green)">${validRows}</strong> ready to import${rows.length-validRows>0?', <strong style="color:var(--amber)">'+(rows.length-validRows)+' will be skipped</strong> (no title)':''}`;
-
-  let warnHtml='';
-  if(warnings.length>0){
-    warnHtml=`<div style="background:var(--amber-bg);border:1px solid rgba(245,166,35,.2);border-radius:var(--radius-sm);padding:10px 14px">
-      <div style="font-size:12px;font-weight:600;color:var(--amber);margin-bottom:4px">⚠ ${warnings.length} warning${warnings.length>1?'s':''}</div>
-      ${warnings.slice(0,5).map(w=>`<div style="font-size:11px;color:var(--text2)">${w}</div>`).join('')}
-      ${warnings.length>5?`<div style="font-size:11px;color:var(--text3)">...and ${warnings.length-5} more</div>`:''}
-    </div>`;
-  }
-  document.getElementById('bulk-warnings').innerHTML=warnHtml;
-
-  document.getElementById('bulk-step1').style.display='none';
-  document.getElementById('bulk-step2').style.display='';
-  setBulkStep(2);
-  document.getElementById('bulk-action-btn').style.display='';
-  document.getElementById('bulk-action-btn').textContent=`Import ${validRows} Tasks →`;
+  document.getElementById('bulk-preview-info').innerHTML=`<span style="color:var(--green);font-weight:600">📂 ${filename}</span> — <strong>${rows.length}</strong> rows, <strong style="color:var(--green)">${validRows}</strong> ready`;
+  document.getElementById('bulk-preview-head').innerHTML=`<tr><th style="padding:8px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)">Task Title</th><th style="padding:8px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)">Owner</th><th style="padding:8px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)">Priority</th><th style="padding:8px;font-size:11px;color:var(--text3);border-bottom:1px solid var(--border)">Status</th></tr>`;
+  document.getElementById('bulk-preview-body').innerHTML=rows.map(row=>{const title=row['task title']||row['title']||'';const owner=row['owner name']||row['owner']||'';const priority=row['priority']||'medium';const status=title?'<span style="color:var(--green);font-size:11px">✅ Ready</span>':'<span style="color:var(--red);font-size:11px">❌ No title</span>';return`<tr><td style="padding:8px;font-size:12px;border-bottom:1px solid var(--border)">${title||'—'}</td><td style="padding:8px;font-size:12px;border-bottom:1px solid var(--border)">${owner||'—'}</td><td style="padding:8px;font-size:12px;border-bottom:1px solid var(--border)">${priority}</td><td style="padding:8px;border-bottom:1px solid var(--border)">${status}</td></tr>`;}).join('');
+  document.getElementById('bulk-step1').style.display='none';document.getElementById('bulk-step2').style.display='';setBulkStep(2);
+  document.getElementById('bulk-action-btn').style.display='';document.getElementById('bulk-action-btn').textContent=`Import ${validRows} Tasks →`;
 }
-
-function bulkActionNext(){
-  if(bulkCurrentStep===2) importBulkTasks();
-  else if(bulkCurrentStep===3){closeModal('bulk-modal');showView('tasks',document.querySelectorAll('.nitem')[1]);}
-}
-
+function bulkActionNext(){if(bulkCurrentStep===2)importBulkTasks();else if(bulkCurrentStep===3){closeModal('bulk-modal');showView('tasks',document.querySelectorAll('.nitem')[1]);}}
 function importBulkTasks(){
-  const statusMap={'work in progress':'wip','in progress':'wip','wip':'wip','on hold':'onhold','onhold':'onhold','not started':'not_started','not started yet':'not_started','not_started':'not_started','pending':'pending','done':'done','completed':'done','cancelled':'cancelled','canceled':'cancelled'};
   const priorityMap={'high':'high','medium':'medium','med':'medium','low':'low'};
   let imported=0,skipped=0,fieldCount=0;
-
   bulkParsedRows.forEach(row=>{
-    const title=(row['task title']||row['title']||'').trim();
-    if(!title){skipped++;return;}
-    // Find owner by name match (case-insensitive)
+    const title=(row['task title']||row['title']||'').trim();if(!title){skipped++;return;}
     const ownerName=(row['owner name']||row['owner']||'').trim().toLowerCase();
     const owner=db.members.find(m=>m.name.toLowerCase()===ownerName||m.name.toLowerCase().includes(ownerName));
-    const repName=(row['our representative']||row['representative']||'').trim().toLowerCase();
-    const rep=repName?db.members.find(m=>m.name.toLowerCase()===repName||m.name.toLowerCase().includes(repName)):null;
-    const rawStatus=(row['task status']||row['status']||'pending').trim().toLowerCase();
-    const status=statusMap[rawStatus]||'pending';
-    const rawPriority=(row['priority']||'medium').trim().toLowerCase();
-    const priority=priorityMap[rawPriority]||'medium';
-    const isField=(row['is field job']||'').trim().toLowerCase()==='yes';
-    if(isField)fieldCount++;
-    const fieldJob=isField?{
-      site:(row['site name']||'').trim(),
-      address:(row['site address']||'').trim(),
-      customer:(row['customer name']||'').trim(),
-      cphone:(row['customer phone']||'').trim(),
-      cmanager:(row['customer manager']||'').trim(),
-      cmanagerphone:(row['customer manager phone']||'').trim(),
-      visitDate:(row['visit date']||'').trim(),
-      visitTime:(row['visit time']||'').trim(),
-      siteNotes:(row['site notes']||'').trim(),
-    }:null;
-    const task={
-      id:uid(),
-      title,
-      desc:(row['description']||'').trim(),
-      ownerId:owner?owner.id:'',
-      repId:rep?rep.id:'',
-      priority,status,
-      dueDate:(row['due date']||row['duedate']||'').trim(),
-      dueTime:(row['due time']||row['duetime']||'').trim(),
-      category:(row['category']||'Work').trim(),
-      repeat:(row['repeat']||'none').trim(),
-      notifs:['browser'],
-      escalation:[],
-      isField,fieldJob,
-      done:status==='done',
-      escalated:false,
-      createdAt:now(),updatedAt:now()
-    };
-    db.tasks.push(task);
-    imported++;
+    const isField=(row['is field job']||'').trim().toLowerCase()==='yes';if(isField)fieldCount++;
+    const fieldJob=isField?{site:(row['site name']||'').trim(),customer:(row['customer name']||'').trim()}:null;
+    db.tasks.push({id:uid(),title,desc:(row['description']||'').trim(),ownerId:owner?owner.id:'',priority:priorityMap[(row['priority']||'medium').toLowerCase()]||'medium',dueDate:(row['due date']||'').trim(),dueTime:(row['due time']||'').trim(),category:(row['category']||'Work').trim(),repeat:'none',notifs:['browser'],escalation:[],isField,fieldJob,done:false,escalated:false,createdAt:now(),updatedAt:now()});imported++;
   });
-
-  saveDB();scheduleAll();
-  log(`⬆ Bulk import: ${imported} tasks imported (${fieldCount} field jobs)`,'success');
-
-  // Show result
-  document.getElementById('bulk-step2').style.display='none';
-  document.getElementById('bulk-step3').style.display='';
-  setBulkStep(3);
-  document.getElementById('bulk-result-icon').textContent=imported>0?'🎉':'⚠️';
-  document.getElementById('bulk-result-title').textContent=imported>0?'Import Successful!':'Nothing Imported';
-  document.getElementById('bulk-result-msg').innerHTML=`
-    <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:12px">
-      <div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--green)">${imported}</div><div style="font-size:12px;color:var(--text3)">Tasks imported</div></div>
-      ${fieldCount>0?`<div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--teal)">${fieldCount}</div><div style="font-size:12px;color:var(--text3)">Field jobs</div></div>`:''}
-      ${skipped>0?`<div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--amber)">${skipped}</div><div style="font-size:12px;color:var(--text3)">Skipped</div></div>`:''}
-    </div>`;
-  document.getElementById('bulk-action-btn').textContent='View Tasks →';
-  renderDashboard();renderTaskList();renderFieldJobs();updateBadges();
-  toast(`✅ ${imported} tasks imported successfully!`,'success');
+  saveDB();scheduleAll();log(`⬆ Bulk import: ${imported} tasks`,'success');
+  document.getElementById('bulk-step2').style.display='none';document.getElementById('bulk-step3').style.display='';setBulkStep(3);
+  document.getElementById('bulk-result-icon').textContent=imported>0?'🎉':'⚠️';document.getElementById('bulk-result-title').textContent=imported>0?'Import Successful!':'Nothing Imported';
+  document.getElementById('bulk-result-msg').innerHTML=`<div style="display:flex;gap:20px;justify-content:center;margin-top:12px"><div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--green)">${imported}</div><div style="font-size:12px;color:var(--text3)">Imported</div></div>${skipped>0?`<div style="text-align:center"><div style="font-size:28px;font-weight:700;color:var(--amber)">${skipped}</div><div style="font-size:12px;color:var(--text3)">Skipped</div></div>`:''}</div>`;
+  document.getElementById('bulk-action-btn').textContent='View Tasks →';renderDashboard();renderTaskList();renderFieldJobs();updateBadges();toast(`✅ ${imported} tasks imported!`,'success');
 }
 
-// ═══ INIT ═════════════════════════════════════════
 document.querySelectorAll('#ntogs .ntog').forEach(el=>el.addEventListener('click',()=>el.classList.toggle('on')));
+
+// ═══ COMMENTS ═══
+function addComment(taskId){
+  const input=document.getElementById('ci-'+taskId);
+  if(!input)return;
+  const text=input.value.trim();
+  if(!text){toast('Comment likhо pehle','warning');return;}
+  const task=db.tasks.find(t=>t.id===taskId);if(!task)return;
+  if(!task.comments)task.comments=[];
+  task.comments.push({
+    id:uid(),
+    text,
+    author:currentUser?currentUser.name||currentUser.username:'Unknown',
+    memberId:currentUser?currentUser.memberId||currentUser.id:'',
+    time:now()
+  });
+  task.updatedAt=now();
+  saveDB();
+  input.value='';
+  // Re-render the task item
+  renderTaskList();renderFieldJobs();renderDashboard();
+  toast('Comment added!','success');
+  // Sync to backend
+  try{TasksAPI.update(taskId,{comments:task.comments});}catch(e){}
+}
+
+// ═══ GPS LOCATION ═══
+function captureGPS(taskId){
+  if(!navigator.geolocation){toast('GPS is not supported on this device','error');return;}
+  toast('📍 Location dhundh raha hoon...','info');
+  navigator.geolocation.getCurrentPosition(
+    async(pos)=>{
+      const lat=pos.coords.latitude.toFixed(6);
+      const lng=pos.coords.longitude.toFixed(6);
+      const task=db.tasks.find(t=>t.id===taskId);if(!task)return;
+      // Reverse geocode using free API
+      let address='Location captured';
+      try{
+        const res=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+        const data=await res.json();
+        if(data&&data.display_name){
+          const parts=data.display_name.split(',');
+          address=parts.slice(0,3).join(', ');
+        }
+      }catch(e){address=`${lat}, ${lng}`;}
+      task.location={lat,lng,address,time:now(),by:currentUser?currentUser.name:'Unknown'};
+      task.updatedAt=now();
+      saveDB();
+      renderTaskList();renderFieldJobs();
+      toast('📍 Location saved: '+address,'success');
+      // Add auto comment
+      if(!task.comments)task.comments=[];
+      task.comments.push({id:uid(),text:`📍 Location tagged: ${address}`,author:currentUser?currentUser.name:'Unknown',memberId:currentUser?currentUser.memberId||currentUser.id:'',time:now()});
+      saveDB();
+      try{TasksAPI.update(taskId,{location:task.location,comments:task.comments});}catch(e){}
+    },
+    (err)=>{
+      if(err.code===1)toast('GPS permission denied. Please allow location access','error');
+      else if(err.code===2)toast('Location unavailable. Check GPS signal','error');
+      else toast('Location error. Try again','error');
+    },
+    {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+  );
+}
 
 function startAppTimers(){
   setInterval(()=>{
     db.tasks.filter(t=>!t.done&&isOverdue(t)).forEach(t=>{
-      (t.escalation||[]).forEach((step,i)=>{
-        if(!step.triggered){
-          const due=new Date(t.dueDate+(t.dueTime?'T'+t.dueTime:'T23:59'));
-          if((Date.now()-due)/3600000>=step.delayHours)fireEscalation(t,step,i);
-        }
-      });
+      (t.escalation||[]).forEach((step,i)=>{if(!step.triggered){const due=new Date(t.dueDate+(t.dueTime?'T'+t.dueTime:'T23:59'));if((Date.now()-due)/3600000>=step.delayHours)fireEscalation(t,step,i);}});
     });
   },60000);
 }
 
-// ═══ TEAM CALL ════════════════════════════════════
-function openTeamCall(){
-  document.getElementById('call-room-name').value='pushp-ci-team-meeting';
-  updateCallLink();
-  openModal('teamcall-modal');
-}
-function updateCallLink(){
-  const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';
-  const link='https://meet.jit.si/'+encodeURIComponent(room);
-  const d=document.getElementById('call-link-display');
-  if(d)d.textContent=link;
-}
-function randomRoomName(){
-  const w=['alpha','bravo','charlie','delta','echo','gulf','hotel'];
-  const r=w[Math.floor(Math.random()*w.length)]+'-'+Math.floor(Math.random()*9000+1000);
-  document.getElementById('call-room-name').value='pushp-ci-'+r;
-  updateCallLink();
-}
-function joinCall(){
-  const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';
-  window.open('https://meet.jit.si/'+encodeURIComponent(room),'_blank');
-  toast('Meeting khul rahi hai! Team ko link share karo.','success');
-  log('Team call started: '+room,'info');
-}
-function copyCallLink(){
-  const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';
-  const link='https://meet.jit.si/'+encodeURIComponent(room);
-  navigator.clipboard.writeText(link).then(()=>toast('Link copied! Team ko bhejo.','success')).catch(()=>{
-    const el=document.createElement('textarea');el.value=link;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);toast('Link copied!','success');
-  });
-}
+function openTeamCall(){document.getElementById('call-room-name').value='pushp-ci-team-meeting';updateCallLink();openModal('teamcall-modal');}
+function updateCallLink(){const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';const link='https://meet.jit.si/'+encodeURIComponent(room);const d=document.getElementById('call-link-display');if(d)d.textContent=link;}
+function randomRoomName(){const w=['alpha','bravo','charlie','delta','echo'];const r=w[Math.floor(Math.random()*w.length)]+'-'+Math.floor(Math.random()*9000+1000);document.getElementById('call-room-name').value='pushp-ci-'+r;updateCallLink();}
+function joinCall(){const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';window.open('https://meet.jit.si/'+encodeURIComponent(room),'_blank');toast('Meeting khul rahi hai!','success');}
+function copyCallLink(){const room=document.getElementById('call-room-name').value.trim().replace(/\s+/g,'-').toLowerCase()||'pushp-ci-team';const link='https://meet.jit.si/'+encodeURIComponent(room);navigator.clipboard.writeText(link).then(()=>toast('Link copied!','success')).catch(()=>{const el=document.createElement('textarea');el.value=link;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);toast('Link copied!','success');});}
 document.addEventListener('input',function(e){if(e.target&&e.target.id==='call-room-name')updateCallLink();});
 
-
-function doLogout(){
-  if(!confirm('Sign out?'))return;
-  currentUser=null;
-  localStorage.removeItem('tfp2_session');
-  localStorage.removeItem('taskflow_token');
-  localStorage.removeItem('taskflow_user');
-  document.getElementById('login-screen').style.display='flex';
-  document.getElementById('app-layout').style.display='none';
-  document.getElementById('l-username').value='';
-  document.getElementById('l-password').value='';
-  document.getElementById('l-err').textContent='';
-  switchLoginTab('login');
-}
-init();
-</script>
-</body>
-</html>
+function init(){
+  if(AuthAPI.isLoggedIn()){
+    const u=AuthAPI.getCurrentUser();
+    if(u){currentUser={id:u.id,username:u.username,name:u.
