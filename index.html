@@ -909,13 +909,7 @@ textarea.fctl{resize:vertical;min-height:65px;}
 </div>
 
 <div class="toast-stack" id="toast-stack"></div>
-  <!-- ═══════════════════════════════════════════════════════ -->
-<!-- COPY EVERYTHING FROM HERE                              -->
-<!-- Paste it in your HTML file after this line:           -->
-<!-- <div class="toast-stack" id="toast-stack"></div>      -->
-<!-- ═══════════════════════════════════════════════════════ -->
-
-<!-- PUSHP ASSISTANT - Voice + Chat -->
+ <!-- PUSHP ASSISTANT - Voice + Chat -->
 <style>
 #pa-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;font-family:'DM Sans',sans-serif;}
 #pa-btn{width:58px;height:58px;border-radius:50%;background:#0a2010;border:2.5px solid #22c55e;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;transition:transform 0.2s;box-shadow:0 4px 20px rgba(34,197,94,0.3);}
@@ -1033,7 +1027,7 @@ setTimeout(function(){var l=document.getElementById('pa-lbl');if(l)l.style.displ
 window.paMT=function(){if(paL){paStop();return;}paListen();};
 function paListen(){
   var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){paBotAdd('Voice input not supported. Use Chrome or Edge.');return;}
+  if(!SR){paBotAdd('Voice input not supported. Please use Chrome or Edge.');return;}
   paR=new SR();paR.lang='en-IN';paR.interimResults=false;
   paR.onstart=function(){paL=true;document.getElementById('pa-mc').classList.add('lis');var v=document.getElementById('pa-vl');v.classList.add('show');v.textContent='🎤 Listening... speak now';};
   paR.onresult=function(e){var t=e.results[0][0].transcript;document.getElementById('pa-in').value=t;paStop();setTimeout(paS,300);};
@@ -1055,48 +1049,93 @@ function paSpeakTxt(txt){
 var paRP={
   'this month summary':function(){
     var tasks=window.db?window.db.tasks:[];
-    var total=tasks.length,done=tasks.filter(function(t){return t.done;}).length;
+    var total=tasks.length;
+    var done=tasks.filter(function(t){return t.done===true;}).length;
+    var pending=tasks.filter(function(t){return t.done!==true;}).length;
     var over=tasks.filter(function(t){return window.isOverdue&&window.isOverdue(t);}).length;
-    var field=tasks.filter(function(t){return t.isField;}).length;
+    var field=tasks.filter(function(t){return t.isField===true;}).length;
     var pct=total?Math.round(done/total*100):0;
     var top='No data';
-    if(window.db&&window.db.members){var best=window.db.members.reduce(function(a,m){var c=tasks.filter(function(t){return t.ownerId===m.id&&t.done;}).length;return c>(a.c||0)?{n:m.name,c:c}:a;},{});if(best.n)top=best.n;}
-    return{t:'Here is your summary:',c:[{l:'Total Tasks',v:total,s:'pbl'},{l:'Completed',v:done+' ('+pct+'%)',s:'pg'},{l:'Pending',v:total-done,s:'po'},{l:'Overdue',v:over,s:'pr'},{l:'Field Jobs',v:field,s:'pbl'},{l:'Top Performer',v:top,s:'pg'}]};
+    if(window.db&&window.db.members&&window.db.members.length){
+      var best=window.db.members.reduce(function(a,m){
+        var c=tasks.filter(function(t){return t.ownerId===m.id&&t.done===true;}).length;
+        return c>(a.c||0)?{n:m.name,c:c}:a;
+      },{});
+      if(best.n)top=best.n;
+    }
+    return{t:'Here is your summary:',c:[
+      {l:'Total Tasks',v:total,s:'pbl'},
+      {l:'Completed',v:done+' ('+pct+'%)',s:'pg'},
+      {l:'Pending',v:pending,s:'po'},
+      {l:'Overdue',v:over,s:'pr'},
+      {l:'Field Jobs',v:field,s:'pbl'},
+      {l:'Top Performer',v:top,s:'pg'}
+    ]};
   },
   'pending tasks':function(){
-    var tasks=window.db?window.db.tasks.filter(function(t){return !t.done;}).slice(0,5):[];
-    if(!tasks.length)return{t:'No pending tasks! All clear.',c:[]};
-    var rows=tasks.map(function(t){var o=window.getMember?window.getMember(t.ownerId):{name:'—'};return{l:t.title.slice(0,26)+(t.title.length>26?'..':''),v:o.name,s:'po'};});
+    var tasks=window.db?window.db.tasks.filter(function(t){return t.done!==true;}).slice(0,5):[];
+    if(!tasks.length)return{t:'No pending tasks! All clear. ✅',c:[]};
+    var rows=tasks.map(function(t){
+      var o=window.getMember?window.getMember(t.ownerId):{name:'Unknown'};
+      return{l:t.title.slice(0,26)+(t.title.length>26?'..':''),v:o.name,s:'po'};
+    });
     return{t:'<strong>'+tasks.length+'</strong> pending task'+(tasks.length!==1?'s':'')+':', c:rows};
   },
   'who is online':function(){
     var members=window.db?window.db.members:[];
     if(!members.length)return{t:'No team members found.',c:[]};
-    var rows=members.map(function(m){var on=window.isOnline&&window.isOnline(m.id);return{l:on?'🟢 Online':'⚫ Offline',v:m.name,s:on?'pg':'po'};});
-    return{t:'Team status:',c:rows};
+    var rows=members.map(function(m){
+      var on=window.isOnline&&window.isOnline(m.id);
+      return{l:on?'🟢 Online':'⚫ Offline',v:m.name,s:on?'pg':'po'};
+    });
+    var onlineCount=rows.filter(function(r){return r.l==='🟢 Online';}).length;
+    return{t:'<strong>'+onlineCount+'</strong> member'+(onlineCount!==1?'s':'')+' online now:',c:rows};
   },
   'overdue tasks':function(){
     var tasks=window.db?window.db.tasks.filter(function(t){return window.isOverdue&&window.isOverdue(t);}).slice(0,5):[];
-    if(!tasks.length)return{t:'No overdue tasks! Everything on time.',c:[]};
-    var rows=tasks.map(function(t){var o=window.getMember?window.getMember(t.ownerId):{name:'—'};return{l:t.title.slice(0,26)+(t.title.length>26?'..':''),v:o.name,s:'pr'};});
+    if(!tasks.length)return{t:'No overdue tasks! Everything on time. ✅',c:[]};
+    var rows=tasks.map(function(t){
+      var o=window.getMember?window.getMember(t.ownerId):{name:'Unknown'};
+      return{l:t.title.slice(0,26)+(t.title.length>26?'..':''),v:o.name,s:'pr'};
+    });
     return{t:'⚠️ <strong>'+tasks.length+'</strong> overdue task'+(tasks.length!==1?'s':'')+':', c:rows};
   }
 };
-var paDF=['Try: "pending tasks", "this month summary", or "who is online"','I am connected to your dashboard data. Ask about tasks or team!','Ask me: "overdue tasks" or "this month summary"'];
+var paDF=[
+  'Try: "pending tasks", "this month summary", "who is online", or "overdue tasks"',
+  'I am connected to your dashboard. Ask me about tasks or team!',
+  'Ask me: "overdue tasks" or "this month summary"'
+];
 var paDI=0;
 window.paA=function(q){paUAdd(q);paTyp(q.toLowerCase());};
 window.paS=function(){var i=document.getElementById('pa-in'),v=i.value.trim();if(!v)return;paA(v);i.value='';};
-function paUAdd(t){var l=document.getElementById('pa-ml'),d=document.createElement('div');d.className='pm pu';d.innerHTML='<div class="pb-b">'+t+'</div><div class="pt">Just now</div>';l.appendChild(d);l.scrollTop=l.scrollHeight;}
-function paTyp(q){var l=document.getElementById('pa-ml'),t=document.createElement('div');t.className='pty';t.id='pa-ty';t.innerHTML='<span></span><span></span><span></span>';l.appendChild(t);l.scrollTop=l.scrollHeight;setTimeout(function(){paBotAdd(q);},1100);}
+function paUAdd(t){
+  var l=document.getElementById('pa-ml'),d=document.createElement('div');
+  d.className='pm pu';
+  d.innerHTML='<div class="pb-b">'+t+'</div><div class="pt">Just now</div>';
+  l.appendChild(d);l.scrollTop=l.scrollHeight;
+}
+function paTyp(q){
+  var l=document.getElementById('pa-ml'),t=document.createElement('div');
+  t.className='pty';t.id='pa-ty';
+  t.innerHTML='<span></span><span></span><span></span>';
+  l.appendChild(t);l.scrollTop=l.scrollHeight;
+  setTimeout(function(){paBotAdd(q);},1100);
+}
 function paBotAdd(q){
   var t=document.getElementById('pa-ty');if(t)t.remove();
-  var l=document.getElementById('pa-ml'),d=document.createElement('div');d.className='pm pb';
+  var l=document.getElementById('pa-ml'),d=document.createElement('div');
+  d.className='pm pb';
   var key=Object.keys(paRP).find(function(k){return q.toLowerCase().includes(k);});
   var sp='';
   if(key){
     var r=paRP[key]();
     var c='';
-    if(r.c&&r.c.length){c='<div class="psc">';r.c.forEach(function(row){c+='<div class="psr"><span class="psl">'+row.l+'</span><span class="psv '+row.s+'">'+row.v+'</span></div>';});c+='</div>';}
+    if(r.c&&r.c.length){
+      c='<div class="psc">';
+      r.c.forEach(function(row){c+='<div class="psr"><span class="psl">'+row.l+'</span><span class="psv '+row.s+'">'+row.v+'</span></div>';});
+      c+='</div>';
+    }
     d.innerHTML='<div class="pb-b">'+r.t+c+'</div><div class="pt">Just now</div>';
     sp=r.t.replace(/<[^>]*>/g,'')+' '+(r.c||[]).map(function(x){return x.l+': '+x.v;}).join(', ');
   }else{
