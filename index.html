@@ -706,7 +706,16 @@ var DM_SUPA_URL='https://msxqifrelaccpdvlohga.supabase.co';
 var DM_SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zeHFpZnJlbGFjY3BkdmxvaGdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NDM4NDMsImV4cCI6MjA5MDUxOTg0M30.hmc3MbdPjTd8vUhw-n--IYld69a3yuDzu0rp4QvOiY0';
 var _dmSupa=null;
 async function getDMSupa(){if(_dmSupa)return _dmSupa;var mod=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');_dmSupa=mod.createClient(DM_SUPA_URL,DM_SUPA_KEY);return _dmSupa;}
-function dmMyId(){return currentUser&&(currentUser.memberId||currentUser.id);}
+function dmMyId(){
+  // Always prefer memberId (Supabase UUID) over user id
+  if(currentUser&&currentUser.memberId)return currentUser.memberId;
+  // Fallback: find member by name match
+  if(currentUser&&db.members.length){
+    var m=db.members.find(function(x){return x.name&&currentUser.name&&x.name.toLowerCase().includes(currentUser.name.toLowerCase().split(' ')[0]);});
+    if(m&&m.id&&m.id.length>10)return m.id; // UUID length check
+  }
+  return currentUser&&currentUser.id;
+}
 async function initDM(){
   renderDMMembersList();
   var myId=dmMyId();if(!myId)return;
@@ -754,15 +763,21 @@ async function openDMWith(memberId){
 }
 async function loadDMMessages(otherId){
   var myId=dmMyId();var container=document.getElementById('dm-messages');if(!container)return;
-  if(!myId){container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ Please link your account to a member profile to use DM</div>';return;}
+  if(!myId||myId.length<10){container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ Your account is not linked to a member profile.<br><small style="color:var(--text3)">Ask admin to link your account in Supabase.</small></div>';return;}
+  if(!otherId||otherId.length<10){container.innerHTML='<div style="color:var(--amber);text-align:center;padding:2rem;font-size:13px">⏳ Loading member data... Please click the member again.</div>';setTimeout(function(){if(dmCurrentUser)openDMWith(dmCurrentUser.id);},1500);return;}
   container.innerHTML='<div style="color:var(--text3);text-align:center;padding:2rem;font-size:13px">Loading...</div>';
   try{
     var supa=await getDMSupa();
-    var res=await supa.from('messages').select('*').or('and(sender_id.eq.'+myId+',receiver_id.eq.'+otherId+'),and(sender_id.eq.'+otherId+',receiver_id.eq.'+myId+')').order('created_at',{ascending:true});
-    if(res.error)throw res.error;
-    renderDMMessages(res.data||[]);
+    var r1=await supa.from('messages').select('*').eq('sender_id',myId).eq('receiver_id',otherId);
+    var r2=await supa.from('messages').select('*').eq('sender_id',otherId).eq('receiver_id',myId);
+    if(r1.error)throw r1.error;if(r2.error)throw r2.error;
+    var all=[...(r1.data||[]),...(r2.data||[])].sort(function(a,b){return new Date(a.created_at)-new Date(b.created_at);});
+    renderDMMessages(all);
     await supa.from('messages').update({is_read:true}).eq('sender_id',otherId).eq('receiver_id',myId).eq('is_read',false);
-  }catch(e){container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ Error loading messages.<br><small style="color:var(--text3)">Create "messages" table in Supabase first.</small></div>';}
+  }catch(e){
+    console.error('DM load error:',e);
+    container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ '+( e.message||'Error loading messages')+'<br><small style="color:var(--text3)">Check browser console for details.</small></div>';
+  }
 }
 function renderDMMessages(msgs){
   var myId=dmMyId();var container=document.getElementById('dm-messages');if(!container)return;
@@ -774,11 +789,27 @@ function renderDMMessages(msgs){
   container.scrollTop=container.scrollHeight;
 }
 async function sendDM(){
-  if(!dmCurrentUser)return;var myId=dmMyId();if(!myId){alert('Please link your account to a member profile');return;}
-  var input=document.getElementById('dm-input');var content=input&&input.value.trim();if(!content)return;
+  if(!dmCurrentUser)return;
+  var myId=dmMyId();
+  if(!myId){alert('Please link your account to a member profile');return;}
+  // Make sure receiver id is a real Supabase UUID (not m1, m2 etc)
+  var receiverId=dmCurrentUser.id;
+  if(!receiverId||receiverId.length<10){
+    toast('Receiver ID invalid. Please refresh the page.','error');return;
+  }
+  var input=document.getElementById('dm-input');
+  var content=input&&input.value.trim();if(!content)return;
   input.value='';
-  try{var supa=await getDMSupa();var res=await supa.from('messages').insert({sender_id:myId,receiver_id:dmCurrentUser.id,content:content});if(res.error)throw res.error;await loadDMMessages(dmCurrentUser.id);}
-  catch(e){toast('Message send failed. Check Supabase setup.','error');if(input)input.value=content;}
+  try{
+    var supa=await getDMSupa();
+    var res=await supa.from('messages').insert({sender_id:myId,receiver_id:receiverId,content:content});
+    if(res.error)throw res.error;
+    await loadDMMessages(receiverId);
+  }catch(e){
+    console.error('DM send error:',e);
+    toast('Message send failed: '+(e.message||'Check Supabase setup.'),'error');
+    if(input)input.value=content;
+  }
 }
 function subscribeDM(otherId){
   if(dmSub){try{dmSub.unsubscribe();}catch(e){}dmSub=null;}
@@ -875,12 +906,14 @@ function updateAllPresenceDots(){db.members.forEach(m=>{const dot=document.getEl
 let currentUser=null;
 let db=JSON.parse(localStorage.getItem('tfp2_db')||'null')||{
   members:[
-    {id:'m1',name:'Atmaram Babu',role:'Site engg',phone:'',email:'',color:'#2e7d32',type:'field'},
-    {id:'m2',name:'MR K Suresh',role:'Consultant',phone:'',email:'',color:'#2ecc8a',type:'office'},
-    {id:'m3',name:'Shubham Yadav',role:'Engineer',phone:'',email:'',color:'#f5a623',type:'office'},
-    {id:'m4',name:'Madhavi Jedhe',role:'Consultant',phone:'',email:'',color:'#448aff',type:'office'},
-    {id:'m5',name:'Vijay .B. Tawade',role:'Site supervisor',phone:'',email:'',color:'#26c6da',type:'field'},
-    {id:'m6',name:'Vitthal Bhanaji',role:'Site engg',phone:'',email:'',color:'#f06292',type:'field'}
+    {id:'4d3bb193-c295-4d32-adab-614dc6cbae50',name:'Mr .Atmaram Babu',role:'Site engg',phone:'',email:'',color:'#2e7d32',type:'field'},
+    {id:'cb1615b3-e865-4430-beca-5879834c3ced',name:'Mr .Vijay .B. Tawade',role:'site',phone:'',email:'',color:'#26c6da',type:'field'},
+    {id:'efb0c0cb-9814-41dd-8a72-6e2ebe4640be',name:'Mr .Vitthal Bhanaji',role:'Site engg',phone:'',email:'',color:'#f06292',type:'field'},
+    {id:'9caa69ad-c2c8-41e4-b20f-ce1c50db84af',name:'Ms. Madhavi Jedhe',role:'Consultant',phone:'',email:'',color:'#448aff',type:'office'},
+    {id:'8e8689eb-6e7e-4692-9f61-b9a425aba34a',name:'Mr. Ashish Yadav',role:'Managing Director',phone:'',email:'',color:'#f5a623',type:'office'},
+    {id:'8d79294d-75c6-4a91-8781-7b3515df5eb0',name:'Mr. K Suresh',role:'Consultant',phone:'',email:'',color:'#2ecc8a',type:'office'},
+    {id:'c0c7b901-213d-4a7d-9fa3-fdf5d8df66fd',name:'Mr. Pravin Bidaye',role:'Co-founder & Director',phone:'',email:'',color:'#ff7043',type:'office'},
+    {id:'95abe4c2-a4ce-40ab-8356-62142c968642',name:'Shubham Yadav',role:'engineer',phone:'',email:'',color:'#7c4dff',type:'office'}
   ],
   tasks:[],activity:[],
   users:[{id:'u0',username:'admin',password:'admin123',name:'Admin',role:'admin',memberId:null}]
