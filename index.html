@@ -1268,6 +1268,39 @@ async function attendanceLogout(){
     localStorage.removeItem('att_session_id');localStorage.removeItem('att_member_id');
   }catch(e){}
 }
+  let chatMessages=[];
+async function loadChat(){
+  try{
+    const res=await apiCall('GET','/api/chat/general');
+    if(res&&res.messages){
+      chatMessages=res.messages;
+      renderChatMessages();
+    }
+  }catch(e){}
+}
+function renderChatMessages(){
+  const container=document.getElementById('chat-messages');
+  if(!container)return;
+  container.innerHTML=chatMessages.length?chatMessages.map(m=>{
+    const isMe=m.user_id===currentUser?.id;
+    const time=new Date(m.created_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    return`<div style="display:flex;flex-direction:column;align-items:${isMe?'flex-end':'flex-start'}">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:2px">${isMe?'You':m.sender_name||'Member'} • ${time}</div>
+      <div style="max-width:70%;padding:8px 14px;border-radius:${isMe?'16px 16px 4px 16px':'16px 16px 16px 4px'};background:${isMe?'var(--green)':'var(--bg3)'};color:${isMe?'#fff':'var(--text1)'};font-size:14px">${m.msg}</div>
+    </div>`;
+  }).join(''):'<div style="text-align:center;color:var(--text3);padding:2rem">No messages yet. Say hello! 👋</div>';
+  container.scrollTop=container.scrollHeight;
+}
+async function sendChatMessage(){
+  const input=document.getElementById('chat-input');
+  const msg=input?.value.trim();
+  if(!msg)return;
+  input.value='';
+  try{
+    await apiCall('POST','/api/chat/general',{msg,sender_name:currentUser?.name||currentUser?.username});
+    await loadChat();
+  }catch(e){}
+}
   function exportAttendanceExcel(){
   const rows=[['Name','Role','Date','Login','Logout','Hours','Status']];
   const summaryItems=document.querySelectorAll('#att-today-list > div');
