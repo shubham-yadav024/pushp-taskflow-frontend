@@ -704,14 +704,20 @@ textarea.fctl{resize:vertical;min-height:65px;}
         <div class="team-grid" id="team-grid"></div>
       </div>
 
-      <!-- ACTIVITY -->
+     
+     <!-- ACTIVITY -->
       <div class="view" id="view-activity">
-        <div style="margin-bottom:1.5rem"><h2 style="font-family:var(--font-head);font-size:18px;font-weight:700">Activity Log</h2></div>
-        <div class="panel"><div class="pb"><div id="full-act"></div></div></div>
+        ...
       </div>
-    </div>
-  </div>
-</div>
+
+      <!-- DIRECT MESSAGES VIEW -->   
+      <div class="view" id="view-dm">
+        ...
+      </div>
+
+    </div>   
+  </div>     
+</div>       
 
 <!-- TASK MODAL -->
 <div class="moverlay" id="task-modal">
@@ -998,7 +1004,7 @@ async function loadDMMessages(otherId){
     renderDMMessages(res.data||[]);
     await supa.from('messages').update({is_read:true}).eq('sender_id',otherId).eq('receiver_id',myId).eq('is_read',false);
   }catch(e){
-    container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ messages table banao Supabase mein. Upar wala SQL run karo.</div>';
+    container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ </div>';
   }
 }
 
