@@ -1286,7 +1286,7 @@ function renderChatMessages(){
     const time=new Date(m.created_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     return`<div style="display:flex;flex-direction:column;align-items:${isMe?'flex-end':'flex-start'}">
       <div style="font-size:11px;color:var(--text3);margin-bottom:2px">${isMe?'You':m.sender_name||'Member'} • ${time}</div>
-      <div style="max-width:70%;padding:8px 14px;border-radius:${isMe?'16px 16px 4px 16px':'16px 16px 16px 4px'};background:${isMe?'var(--green)':'var(--bg3)'};color:${isMe?'#fff':'var(--text1)'};font-size:14px">${m.msg}</div>
+      <div style="max-width:70%;padding:8px 14px;border-radius:${isMe?'16px 16px 4px 16px':'16px 16px 16px 4px'};background:${isMe?'var(--green)':'var(--bg3)'};color:${isMe?'#fff':'var(--text1)'};font-size:14px">${m.text}</div>
     </div>`;
   }).join(''):'<div style="text-align:center;color:var(--text3);padding:2rem">No messages yet. Say hello! 👋</div>';
   container.scrollTop=container.scrollHeight;
