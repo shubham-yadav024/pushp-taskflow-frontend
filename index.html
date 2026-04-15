@@ -673,7 +673,10 @@ textarea.fctl{resize:vertical;min-height:65px;}
           <div class="pb" id="att-today-list"><div style="text-align:center;color:var(--text3);padding:2rem">Loading...</div></div>
         </div>
         <div class="panel">
-          <div class="ph"><h3>Attendance History</h3></div>
+        <div class="ph" style="display:flex;align-items:center;justify-content:space-between">
+  <h3>Attendance History</h3>
+  <button class="btn btn-primary" onclick="exportAttendanceExcel()" style="font-size:12px;padding:6px 14px">📊 Export Excel</button>
+</div>
           <div class="pb" id="att-history-list"><div style="text-align:center;color:var(--text3);padding:2rem">Please apply a date filter above to view history</div></div>
         </div>
       </div>
