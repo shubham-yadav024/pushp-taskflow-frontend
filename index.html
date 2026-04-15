@@ -892,7 +892,171 @@ textarea.fctl{resize:vertical;min-height:65px;}
     </div>
   </div>
 </div>
+<!-- DIRECT MESSAGES VIEW -->
+<div class="view" id="view-dm">
+  <div style="display:flex;height:calc(100vh - 120px);gap:0;overflow:hidden" class="panel">
+    <div id="dm-members-list" style="width:220px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:10px 8px;"></div>
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px">
+        <span id="dm-chat-title" style="color:var(--text3)">Select a team member to chat</span>
+      </div>
+      <div id="dm-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px"></div>
+      <div id="dm-input-area" style="padding:12px;border-top:1px solid var(--border);display:none;gap:8px">
+        <input id="dm-input" type="text" placeholder="Type a message..."
+          style="flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;outline:none"
+          onkeydown="if(event.key==='Enter')sendDM()"/>
+        <button class="btn btn-primary" onclick="sendDM()" style="border-radius:20px;flex-shrink:0">Send →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<script>
+// ═══ DIRECT MESSAGES ═══
+var dmCurrentUser=null,dmSub=null,dmUnread={};
+var DM_SUPA_URL='https://msxqifrelaccpdvlohga.supabase.co';
+var DM_SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1zeHFpZnJlbGFjY3BkdmxvaGdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NDM4NDMsImV4cCI6MjA5MDUxOTg0M30.hmc3MbdPjTd8vUhw-n--IYld69a3yuDzu0rp4QvOiY0';
+
+async function getDMSupa(){
+  var mod=await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+  return mod.createClient(DM_SUPA_URL,DM_SUPA_KEY);
+}
+function dmMyId(){return currentUser&&(currentUser.memberId||currentUser.id);}
+
+async function initDM(){
+  renderDMMembersList();
+  var supa=await getDMSupa();
+  var myId=dmMyId();if(!myId)return;
+  var res=await supa.from('messages').select('sender_id').eq('receiver_id',myId).eq('is_read',false);
+  if(res.data){res.data.forEach(function(r){dmUnread[r.sender_id]=(dmUnread[r.sender_id]||0)+1;});updateDMBadges();}
+}
+
+function renderDMMembersList(){
+  var myId=dmMyId();
+  var others=db.members.filter(function(m){return m.id!==myId;});
+  var html='<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;padding:4px 8px;margin-bottom:6px">Team Members</div>';
+  others.forEach(function(m){
+    var unread=dmUnread[m.id]||0;
+    var online=isOnline(m.id);
+    html+='<div id="dm-item-'+m.id+'" onclick="openDMWith(\''+m.id+'\')" style="display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;cursor:pointer;margin-bottom:2px;transition:background .15s" onmouseover="this.style.background=\'var(--bg3)\'" onmouseout="this.style.background=(dmCurrentUser&&dmCurrentUser.id===\''+m.id+'\')?\'var(--accent-glow)\':\'\'">'
+      +'<div style="position:relative;flex-shrink:0"><div class="oavatar" style="background:'+m.color+';width:34px;height:34px;font-size:12px">'+initials(m.name)+'</div>'
+      +'<div style="position:absolute;bottom:0;right:0;width:8px;height:8px;border-radius:50%;border:2px solid var(--bg2);background:'+(online?'#2ecc8a':'#555')+'"></div></div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+m.name+'</div>'
+      +'<div style="font-size:11px;color:var(--text3)">'+(m.role||'')+'</div></div>'
+      +(unread>0?'<span id="dm-badge-'+m.id+'" style="background:var(--blue);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px">'+unread+'</span>':'<span id="dm-badge-'+m.id+'"></span>')
+      +'</div>';
+  });
+  var el=document.getElementById('dm-members-list');
+  if(el)el.innerHTML=html;
+}
+
+function updateDMBadges(){
+  var total=0;
+  Object.entries(dmUnread).forEach(function(entry){
+    var badge=document.getElementById('dm-badge-'+entry[0]);
+    if(badge){if(entry[1]>0){badge.textContent=entry[1];badge.style.display='';}else badge.textContent='';}
+    total+=entry[1];
+  });
+  var nb=document.getElementById('nb-dm');
+  if(nb){nb.textContent=total;nb.style.display=total>0?'':'none';}
+}
+
+async function openDMWith(memberId){
+  var member=db.members.find(function(m){return m.id===memberId;});
+  if(!member)return;
+  dmCurrentUser=member;
+  var online=isOnline(memberId);
+  var titleEl=document.getElementById('dm-chat-title');
+  if(titleEl){
+    titleEl.innerHTML='<div class="oavatar" style="background:'+member.color+';width:26px;height:26px;font-size:10px">'+initials(member.name)+'</div>'
+      +'<span>'+member.name+'</span>'
+      +'<div class="presence-dot '+(online?'online':'offline')+'" style="margin-left:4px"></div>'
+      +'<span style="font-size:12px;color:'+(online?'var(--green)':'var(--text3)')+';">'+(online?'Online':'Offline')+'</span>';
+  }
+  var ia=document.getElementById('dm-input-area');
+  if(ia)ia.style.display='flex';
+  document.querySelectorAll('[id^="dm-item-"]').forEach(function(el){el.style.background='';});
+  var activeEl=document.getElementById('dm-item-'+memberId);
+  if(activeEl)activeEl.style.background='var(--accent-glow)';
+  await loadDMMessages(memberId);
+  subscribeDM(memberId);
+  dmUnread[memberId]=0;
+  updateDMBadges();
+}
+
+async function loadDMMessages(otherId){
+  var myId=dmMyId();
+  var container=document.getElementById('dm-messages');
+  if(!container)return;
+  container.innerHTML='<div style="color:var(--text3);text-align:center;padding:2rem;font-size:13px">Loading...</div>';
+  try{
+    var supa=await getDMSupa();
+    var res=await supa.from('messages').select('*')
+      .or('and(sender_id.eq.'+myId+',receiver_id.eq.'+otherId+'),and(sender_id.eq.'+otherId+',receiver_id.eq.'+myId+')')
+      .order('created_at',{ascending:true});
+    if(res.error)throw res.error;
+    renderDMMessages(res.data||[]);
+    await supa.from('messages').update({is_read:true}).eq('sender_id',otherId).eq('receiver_id',myId).eq('is_read',false);
+  }catch(e){
+    container.innerHTML='<div style="color:var(--red);text-align:center;padding:2rem;font-size:13px">❌ messages table banao Supabase mein. Upar wala SQL run karo.</div>';
+  }
+}
+
+function renderDMMessages(msgs){
+  var myId=dmMyId();
+  var container=document.getElementById('dm-messages');
+  if(!container)return;
+  if(!msgs.length){
+    container.innerHTML='<div style="text-align:center;color:var(--text3);padding:3rem"><div style="font-size:36px;margin-bottom:12px">💬</div><div>No messages yet. Say hello!</div></div>';
+    return;
+  }
+  container.innerHTML=msgs.map(function(msg){
+    var isMine=msg.sender_id===myId;
+    var time=new Date(msg.created_at).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    return'<div style="display:flex;flex-direction:column;align-items:'+(isMine?'flex-end':'flex-start')+'">'
+      +'<div style="max-width:68%;padding:9px 13px;border-radius:'+(isMine?'16px 16px 4px 16px':'16px 16px 16px 4px')
+      +';background:'+(isMine?'var(--accent)':'var(--bg3)')+';color:'+(isMine?'#fff':'var(--text)')+';font-size:14px;line-height:1.5;word-break:break-word">'
+      +msg.content+'</div>'
+      +'<div style="font-size:10px;color:var(--text3);margin-top:2px;padding:0 3px">'+time+(isMine&&msg.is_read?' ✓✓':'')+'</div>'
+      +'</div>';
+  }).join('');
+  container.scrollTop=container.scrollHeight;
+}
+
+async function sendDM(){
+  if(!dmCurrentUser)return;
+  var input=document.getElementById('dm-input');
+  var content=input&&input.value.trim();
+  if(!content)return;
+  input.value='';
+  try{
+    var supa=await getDMSupa();
+    await supa.from('messages').insert({sender_id:dmMyId(),receiver_id:dmCurrentUser.id,content:content});
+    await loadDMMessages(dmCurrentUser.id);
+  }catch(e){
+    toast('Message send failed','error');
+    if(input)input.value=content;
+  }
+}
+
+function subscribeDM(otherId){
+  if(dmSub){try{dmSub.unsubscribe();}catch(e){}dmSub=null;}
+  var myId=dmMyId();
+  getDMSupa().then(function(supa){
+    dmSub=supa.channel('dm-'+myId+'-'+otherId)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(payload){
+        var msg=payload.new;
+        if((msg.sender_id===otherId&&msg.receiver_id===myId)||(msg.sender_id===myId&&msg.receiver_id===otherId)){
+          loadDMMessages(otherId);
+        }
+        if(msg.receiver_id===myId&&msg.sender_id!==otherId){
+          dmUnread[msg.sender_id]=(dmUnread[msg.sender_id]||0)+1;
+          updateDMBadges();
+        }
+      }).subscribe();
+  });
+}
+</script>
 <!-- TEAM CALL MODAL -->
 <div class="moverlay" id="teamcall-modal">
   <div class="modal" style="max-width:520px">
