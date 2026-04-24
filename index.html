@@ -3688,13 +3688,23 @@ function renderAnalytics(){
   const cats=[...new Set(tasks.map(t=>t.category||'Other'))];
   document.getElementById('cat-bars').innerHTML=cats.map(c=>{const ct=tasks.filter(t=>(t.category||'Other')===c),cd=ct.filter(t=>t.done).length,cp=ct.length?Math.round(cd/ct.length*100):0;return`<div class="bar-row"><div class="bar-lbl">${c}</div><div class="bar-track"><div class="bar-fill" style="width:${cp}%;background:var(--accent)"></div></div><div class="bar-pct" style="color:var(--accent)">${cp}%</div></div>`;}).join('')||'<div style="color:var(--text3);font-size:13px">No tasks yet</div>';
   document.getElementById('member-perf').innerHTML=db.members.map(m=>{
-    const mt=tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mo=mt.filter(t=>isOverdue(t)).length,me=mt.filter(t=>t.escalated).length,mf=mt.filter(t=>t.isField).length,mp=mt.length?Math.round(md/mt.length*100):0;
-    return`<div style="margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-      <div class="oavatar" style="background:${m.color};width:26px;height:26px;font-size:10px">${initials(m.name)}</div>
-      <span style="font-size:13px;font-weight:500;flex:1">${m.name}</span>
-      ${mf?`<span class="badge badge-field">📍 ${mf}</span>`:''}${mo?`<span class="badge badge-overdue">${mo} overdue</span>`:''}${me?`<span class="badge badge-escalated">${me} esc</span>`:''}
-      <span style="font-size:14px;font-weight:700;color:${mp>=80?'var(--green)':mp>=50?'var(--amber)':'var(--red)'};min-width:38px;text-align:right">${mp}%</span>
-    </div><div style="display:flex;align-items:center;gap:8px"><div class="bar-track" style="flex:1;height:10px"><div class="bar-fill" style="width:${mp}%;background:${m.color}"></div></div><span style="font-size:12px;color:var(--text3)">${md}/${mt.length}</span></div></div>`;
+    const mt=tasks.filter(t=>t.ownerId===m.id),md=mt.filter(t=>t.done).length,mo=mt.filter(t=>isOverdue(t)&&!t.done).length,me=mt.filter(t=>t.escalated).length,mf=mt.filter(t=>t.isField).length,mp=mt.length?Math.round(md/mt.length*100):0;
+    const barCol=mp===100?'var(--green)':mo>0?'var(--red)':m.color;
+    return`<div onclick="openMemberDetail('${m.id}')" style="margin-bottom:10px;padding:12px 14px;background:var(--bg2);border-radius:10px;border:1px solid var(--border2);cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div class="oavatar" style="background:${m.color};width:30px;height:30px;font-size:11px;flex-shrink:0">${initials(m.name)}</div>
+        <span style="font-size:13px;font-weight:600;flex:1;color:var(--text)">${m.name}</span>
+        ${mo?`<span class="badge badge-overdue">🔴 ${mo} overdue</span>`:''}
+        ${mf?`<span class="badge badge-field">📍 ${mf}</span>`:''}
+        ${me?`<span class="badge badge-escalated">🔺 ${me}</span>`:''}
+        <span style="font-size:14px;font-weight:800;color:${mp>=80?'var(--green)':mp>=50?'var(--amber)':'var(--red)'};">${mp}%</span>
+        <span style="font-size:12px;color:var(--text3)">→</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="bar-track" style="flex:1;height:8px;border-radius:4px"><div class="bar-fill" style="width:${mp}%;background:${barCol};border-radius:4px;transition:width .4s"></div></div>
+        <span style="font-size:12px;color:var(--text3);min-width:32px;text-align:right">${md}/${mt.length}</span>
+      </div>
+    </div>`;
   }).join('')||'<div style="color:var(--text3);font-size:13px">No members yet</div>';
   const days=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d.toISOString().split('T')[0];});
   const counts=days.map(d=>tasks.filter(t=>t.createdAt&&t.createdAt.startsWith(d)).length);
